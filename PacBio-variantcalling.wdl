@@ -23,7 +23,7 @@ version 1.0
 import "PacBio-subreads-processing/PacBio-subreads-processing.wdl" as SubreadsProcessing
 import "tasks/minimap2.wdl" as minimap2
 
-workflow VariantDiscovery {
+workflow VariantCalling {
     input {
         File subreadsConfigFile
         File dockerImagesFile

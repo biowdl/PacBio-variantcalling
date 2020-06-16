@@ -20,7 +20,7 @@
   tags:
     - sanity
   command: >
-    womtool validate PacBio-variant-discovery.wdl
+    womtool validate PacBio-variantcalling.wdl
   stdout:
     contains:
       - "Success!"
@@ -30,8 +30,8 @@
     - sanity
   command: >
     womtool validate
-    --inputs test/data/config/variant_discovery.json
-    PacBio-variant-discovery.wdl
+    --inputs test/data/config/variant_calling.json
+    PacBio-variantcalling.wdl
   stdout:
     contains:
       - "Success!"
