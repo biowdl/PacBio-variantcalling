@@ -21,16 +21,26 @@ version 1.0
 # SOFTWARE.
 
 import "PacBio-subreads-processing/PacBio-subreads-processing.wdl" as SubreadsProcessing
+import "tasks/minimap2.wdl" as minimap2
 
 workflow VariantDiscovery {
     input {
         File subreadsConfigFile
         File dockerImagesFile
+        File referenceFile
+        String referencePrefix
     }
 
     call SubreadsProcessing.SubreadsProcessing as SubreadsProcessing {
       input:
         subreadsConfigFile = subreadsConfigFile,
         dockerImagesFile = dockerImagesFile
+    }
+
+    call minimap2.Indexing as index {
+      input:
+        useHomopolymerCompressedKmer = true,
+        outputPrefix = referencePrefix,
+        referenceFile = referenceFile
     }
 }

@@ -1,3 +1,6 @@
 [submodule "PacBio-subreads-processing"]
 	path = PacBio-subreads-processing
 	url = https://github.com/biowdl/PacBio-subreads-processing.git
+[submodule "tasks"]
+	path = tasks
+	url = https://github.com/biowdl/tasks.git

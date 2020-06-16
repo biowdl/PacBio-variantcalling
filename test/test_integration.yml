@@ -7,4 +7,5 @@
     PacBio-variant-discovery.wdl
   stdout:
     contains_regex:
-      - "VariantDiscovery.SubreadsProcessing.outputLima.*batch_1_march.fl.Sample_1_3p--Sample_1_3p.bam"
+      - 'VariantDiscovery.SubreadsProcessing.outputLima.*batch_1_march.fl.Sample_1_3p--Sample_1_3p.bam'
+      - 'VariantDiscovery.index.outputIndexFile.*LC029411.mmi'

@@ -1,4 +1,6 @@
 {
     "VariantDiscovery.subreadsConfigFile": "test/data/config/subreadsconfig.json",
+    "VariantDiscovery.referenceFile": "test/data/reference/LC029411.fasta",
+    "VariantDiscovery.referencePrefix": "LC029411",
     "VariantDiscovery.dockerImagesFile": "dockerImages.yml"
 }
