@@ -20,10 +20,17 @@ version 1.0
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import "PacBio-subreads-processing/PacBio-subreads-processing.wdl" as SubreadsProcessing
 
 workflow VariantDiscovery {
     input {
         File subreadsConfigFile
         File dockerImagesFile
+    }
+
+    call SubreadsProcessing.SubreadsProcessing as SubreadsProcessing {
+      input:
+        subreadsConfigFile = subreadsConfigFile,
+        dockerImagesFile = dockerImagesFile
     }
 }

@@ -1,0 +1,4 @@
+{
+    "VariantDiscovery.subreadsConfigFile": "tests/samplesheets/batches.json",
+    "VariantDiscovery.dockerImagesFile": "dockerImages.yml"
+}

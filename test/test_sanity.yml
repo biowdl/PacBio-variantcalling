@@ -24,3 +24,14 @@
   stdout:
     contains:
       - "Success!"
+
+- name: validate-workflow-settings
+  tags:
+    - sanity
+  command: >
+    womtool validate
+    --inputs test/data/config/variant_discovery.json
+    PacBio-variant-discovery.wdl
+  stdout:
+    contains:
+      - "Success!"
