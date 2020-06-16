@@ -6,3 +6,21 @@
   stdout:
     contains:
       - "cromwell"
+
+- name: test-womtool
+  tags:
+    - sanity
+  command: >
+    womtool --version
+  stdout:
+    contains:
+      - "womtool"
+
+- name: validate-workflow-wdl
+  tags:
+    - sanity
+  command: >
+    womtool validate PacBio-variant-discovery.wdl
+  stdout:
+    contains:
+      - "Success!"
