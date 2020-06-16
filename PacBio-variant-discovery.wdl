@@ -43,4 +43,14 @@ workflow VariantDiscovery {
         outputPrefix = referencePrefix,
         referenceFile = referenceFile
     }
+
+    scatter (bam in SubreadsProcessing.outputLima) {
+      call minimap2.Mapping as mapping {
+        input:
+          presetOption = "map-ont",
+          outputPrefix = "temp",
+          referenceFile = index.outputIndexFile,
+          queryFile = bam
+      }
+    }
 }
