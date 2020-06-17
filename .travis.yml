@@ -37,12 +37,9 @@ after_failure:
 
 matrix:
   include:
-    - env:
+    - env: TEST="validate-workflow-wdl"
       stage: lint
-      - TEST="validate-workflow-wdl"
-    - env:
+    - env: TEST="validate-workflow-settings"
       stage: lint
-      - TEST="validate-workflow-settings"
-    - env:
+    - env: TEST="test-workflow"
       stage: integration
-      - TEST="test-workflow"
