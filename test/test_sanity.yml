@@ -41,6 +41,3 @@
     - sanity
   command: >
     bash scripts/biowdl_lint.sh
-  files:
-    - path: wdl-aid_stderr
-      should_exist: false
