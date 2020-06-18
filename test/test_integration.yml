@@ -10,3 +10,7 @@
     contains_regex:
       - 'VariantCalling.SubreadsProcessing.outputLima.*batch_1_march.fl.Sample_1_3p--Sample_1_3p.bam'
       - 'VariantCalling.index.outputIndexFile.*LC029411.mmi'
+  files:
+    - path: test-output/Sample_1_3p.align.bam
+    - path: test-output/Sample_3_3p.align.bam
+    - path: test-output/Sample_4_3p.align.bam

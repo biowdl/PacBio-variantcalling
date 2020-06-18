@@ -22,6 +22,7 @@ version 1.0
 
 import "PacBio-subreads-processing/PacBio-subreads-processing.wdl" as SubreadsProcessing
 import "tasks/minimap2.wdl" as minimap2
+import "pbmm2.wdl" as pbmm2
 
 workflow VariantCalling {
     input {
@@ -48,11 +49,12 @@ workflow VariantCalling {
     Array[Pair[String, File]] SampleBam = zip(SubreadsProcessing.outputSamples, SubreadsProcessing.outputLima)
 
     scatter (pair in SampleBam) {
-      call minimap2.Mapping as mapping {
+      call pbmm2.Mapping as mapping {
         input:
-          presetOption = "map-ont",
-          referenceFile = index.outputIndexFile,
-          outputPrefix = pair.left,
+          presetOption = "CCS",
+          sort = true,
+          referenceMMI = index.outputIndexFile,
+          sample = pair.left,
           queryFile = pair.right
       }
     }
