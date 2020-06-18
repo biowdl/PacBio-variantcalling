@@ -44,13 +44,16 @@ workflow VariantCalling {
         referenceFile = referenceFile
     }
 
-    scatter (bam in SubreadsProcessing.outputLima) {
+    # Combine the sample names with the bam files
+    Array[Pair[String, File]] SampleBam = zip(SubreadsProcessing.outputSamples, SubreadsProcessing.outputLima)
+
+    scatter (pair in SampleBam) {
       call minimap2.Mapping as mapping {
         input:
           presetOption = "map-ont",
-          outputPrefix = "temp",
           referenceFile = index.outputIndexFile,
-          queryFile = bam
+          outputPrefix = pair.left,
+          queryFile = pair.right
       }
     }
 }
