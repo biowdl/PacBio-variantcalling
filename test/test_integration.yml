@@ -3,6 +3,7 @@
     - integration
   command: >
     cromwell run 
+    --options test/data/config/cromwell.options.json
     --inputs test/data/config/variant_calling.json
     PacBio-variantcalling.wdl
   stdout:

@@ -44,13 +44,24 @@ workflow VariantCalling {
         referenceFile = referenceFile
     }
 
-    scatter (bam in SubreadsProcessing.outputLima) {
+    # Combine the sample names with the bam files
+    Array[Pair[String, File]] SampleBam = zip(SubreadsProcessing.outputSamples, SubreadsProcessing.outputLima)
+
+    scatter (pair in SampleBam) {
       call minimap2.Mapping as mapping {
         input:
           presetOption = "map-ont",
-          outputPrefix = "temp",
           referenceFile = index.outputIndexFile,
-          queryFile = bam
+          outputPrefix = pair.left,
+          queryFile = pair.right
       }
+    }
+
+    parameter_meta {
+        # inputs
+        referencePrefix: {description: "Name of the reference.", category: "required"}
+        referenceFile: {description: "The fasta file to be used as reference.", category: "required"}
+        dockerImagesFile: {description: "The docker image used for this workflow. Changing this may result in errors which the developers may choose not to address.", category: "required"}
+        subreadsConfigFile: {description: "Configuration file for the subreads processing.", category: "required"}
     }
 }

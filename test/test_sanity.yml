@@ -35,3 +35,9 @@
   stdout:
     contains:
       - "Success!"
+
+- name: biowdl-lint
+  tags:
+    - sanity
+  command: >
+    bash scripts/biowdl_lint.sh
