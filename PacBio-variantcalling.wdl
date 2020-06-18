@@ -56,4 +56,12 @@ workflow VariantCalling {
           queryFile = pair.right
       }
     }
+
+    parameter_meta {
+        # inputs
+        referencePrefix: {description: "Name of the reference.", category: "required"}
+        referenceFile: {description: "The fasta file to be used as reference.", category: "required"}
+        dockerImagesFile: {description: "The docker image used for this workflow. Changing this may result in errors which the developers may choose not to address.", category: "required"}
+        subreadsConfigFile: {description: "Configuration file for the subreads processing.", category: "required"}
+    }
 }
