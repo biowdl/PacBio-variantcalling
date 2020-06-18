@@ -8,3 +8,5 @@
 pytest-workflow
 cromwell=46.1
 womtool=46.1
+miniwdl
+wdl-aid

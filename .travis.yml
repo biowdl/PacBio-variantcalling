@@ -21,12 +21,16 @@ before_install:
 
 stages:
   - lint
-  - integration
+  - test
 
-stage: integration
+stage: test
 
 install:
   - conda install --file requirements-test.txt
+  # FIXME temporary hack
+  - cromwell --version
+  - wget https://github.com/rhpvorderman/cromwell/releases/download/51-dev-94aa944/cromwell-51-94aa944-SNAP.jar -O ${HOME}/miniconda/share/cromwell/cromwell.jar
+  - cromwell --version
 
 script:
   - travis_wait 30 pytest --keep-workflow-wd-on-fail --tag $TEST test/
@@ -37,12 +41,16 @@ after_failure:
 
 matrix:
   include:
-    - env:
+    - env: TEST="validate"
       stage: lint
+      install:
+        - conda install cromwell miniwdl wdl-aid
+      script: bash scripts/biowdl_lint.sh
+      after_failure:
+        - echo "Linting failed"
+    - env:
       - TEST="validate-workflow-wdl"
     - env:
-      stage: lint
       - TEST="validate-workflow-settings"
     - env:
-      stage: integration
       - TEST="test-workflow"
