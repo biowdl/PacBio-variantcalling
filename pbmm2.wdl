@@ -48,6 +48,7 @@ task Mapping {
 
     output {
         File outputAlignmentFile = sample + ".align.bam"
+        File outputIndexFile = sample + ".align.bam.bai"
     }
 
     runtime {
@@ -69,6 +70,7 @@ task Mapping {
         dockerImage: {description: "The docker image used for this task. Changing this may result in errors which the developers may choose not to address.", category: "advanced"}
 
         # output
-        outputAlignmentFile: {description: "Mapped bam files."}
+        outputAlignmentFile: {description: "Mapped bam file."}
+        outputIndexFile: {description: "Bam index file."}
     }
 }

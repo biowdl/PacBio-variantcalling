@@ -12,5 +12,8 @@
       - 'VariantCalling.index.outputIndexFile.*LC029411.mmi'
   files:
     - path: test-output/Sample_1_3p.align.bam
+    - path: test-output/Sample_1_3p.align.bam.bai
     - path: test-output/Sample_3_3p.align.bam
+    - path: test-output/Sample_3_3p.align.bam.bai
     - path: test-output/Sample_4_3p.align.bam
+    - path: test-output/Sample_4_3p.align.bam.bai
