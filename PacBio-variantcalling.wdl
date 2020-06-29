@@ -64,9 +64,10 @@ workflow VariantCalling {
         input:
           inputBams = [mapping.outputAlignmentFile],
           inputBamsIndex = [mapping.outputIndexFile],
-          outputPath = pair.left,
+          outputPath = pair.left + ".vcf.gz",
           referenceFasta = referenceFile,
           referenceFastaIndex = referenceFileIndex,
+          gvcf = false,
           referenceFastaDict = referenceFileDict
       }
     }
