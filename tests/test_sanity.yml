@@ -30,7 +30,7 @@
     - sanity
   command: >
     womtool validate
-    --inputs test/data/config/variant_calling.json
+    --inputs tests/data/config/variant_calling.json
     PacBio-variantcalling.wdl
   stdout:
     contains:

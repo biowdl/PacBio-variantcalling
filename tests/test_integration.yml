@@ -3,8 +3,8 @@
     - integration
   command: >
     cromwell run 
-    --options test/data/config/cromwell.options.json
-    --inputs test/data/config/variant_calling.json
+    --options tests/data/config/cromwell.options.json
+    --inputs tests/data/config/variant_calling.json
     PacBio-variantcalling.wdl
   stdout:
     contains_regex:

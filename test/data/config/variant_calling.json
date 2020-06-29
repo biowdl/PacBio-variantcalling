@@ -1,6 +1,0 @@
-{
-    "VariantCalling.subreadsConfigFile": "test/data/config/subreadsconfig.json",
-    "VariantCalling.referenceFile": "test/data/reference/LC029411.fasta",
-    "VariantCalling.referencePrefix": "LC029411",
-    "VariantCalling.dockerImagesFile": "dockerImages.yml"
-}
