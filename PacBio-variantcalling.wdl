@@ -23,12 +23,15 @@ version 1.0
 import "PacBio-subreads-processing/PacBio-subreads-processing.wdl" as SubreadsProcessing
 import "tasks/minimap2.wdl" as minimap2
 import "pbmm2.wdl" as pbmm2
+import "tasks/gatk.wdl" as gatk
 
 workflow VariantCalling {
     input {
         File subreadsConfigFile
         File dockerImagesFile
         File referenceFile
+        File referenceFileIndex
+        File referenceFileDict
         String referencePrefix
     }
 
@@ -57,12 +60,23 @@ workflow VariantCalling {
           sample = pair.left,
           queryFile = pair.right
       }
+      call gatk.HaplotypeCaller as gatk {
+        input:
+          inputBams = [mapping.outputAlignmentFile],
+          inputBamsIndex = [mapping.outputIndexFile],
+          outputPath = pair.left,
+          referenceFasta = referenceFile,
+          referenceFastaIndex = referenceFileIndex,
+          referenceFastaDict = referenceFileDict
+      }
     }
 
     parameter_meta {
         # inputs
         referencePrefix: {description: "Name of the reference.", category: "required"}
         referenceFile: {description: "The fasta file to be used as reference.", category: "required"}
+        referenceFileIndex: {description: "The fasta file index, must match the reference.", category: "required"}
+        referenceFileDict: {description: "The fasta file index, must match the reference.", category: "required"}
         dockerImagesFile: {description: "The docker image used for this workflow. Changing this may result in errors which the developers may choose not to address.", category: "required"}
         subreadsConfigFile: {description: "Configuration file for the subreads processing.", category: "required"}
     }
