@@ -21,9 +21,10 @@ version 1.0
 # SOFTWARE.
 
 import "PacBio-subreads-processing/PacBio-subreads-processing.wdl" as SubreadsProcessing
-import "tasks/minimap2.wdl" as minimap2
-import "pbmm2.wdl" as pbmm2
+
 import "tasks/gatk.wdl" as gatk
+import "tasks/minimap2.wdl" as minimap2
+import "tasks/pbmm2.wdl" as pbmm2
 
 workflow VariantCalling {
     input {
