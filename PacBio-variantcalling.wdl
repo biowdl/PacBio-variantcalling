@@ -33,6 +33,7 @@ workflow VariantCalling {
         File referenceFile
         File referenceFileIndex
         File referenceFileDict
+        File? referenceFileMMI
         String referencePrefix
     }
 
@@ -42,12 +43,16 @@ workflow VariantCalling {
         dockerImagesFile = dockerImagesFile
     }
 
-    call minimap2.Indexing as index {
-      input:
-        useHomopolymerCompressedKmer = true,
-        outputPrefix = referencePrefix,
-        referenceFile = referenceFile
+    if (!defined(referenceFileMMI)) {
+      call minimap2.Indexing as index {
+        input:
+          useHomopolymerCompressedKmer = true,
+          outputPrefix = referencePrefix,
+          referenceFile = referenceFile
+      }
     }
+
+    File referenceMMI = select_first([referenceFileMMI, index.outputIndexFile])
 
     # Combine the sample names with the bam files
     Array[Pair[String, File]] SampleBam = zip(SubreadsProcessing.outputSamples, SubreadsProcessing.outputLima)
@@ -57,7 +62,7 @@ workflow VariantCalling {
         input:
           presetOption = "CCS",
           sort = true,
-          referenceMMI = index.outputIndexFile,
+          referenceMMI = referenceMMI,
           sample = pair.left,
           queryFile = pair.right
       }
@@ -77,8 +82,9 @@ workflow VariantCalling {
         # inputs
         referencePrefix: {description: "Name of the reference.", category: "required"}
         referenceFile: {description: "The fasta file to be used as reference.", category: "required"}
-        referenceFileIndex: {description: "The fasta file index, must match the reference.", category: "required"}
-        referenceFileDict: {description: "The fasta file index, must match the reference.", category: "required"}
+        referenceFileIndex: {description: "The samtools index file for the reference.", category: "required"}
+        referenceFileDict: {description: "The picard dictionary file for the reference.", category: "required"}
+        referenceFileMMI: {description: "The minimap2 mmi file for the reference.", category: "optional"}
         dockerImagesFile: {description: "The docker image used for this workflow. Changing this may result in errors which the developers may choose not to address.", category: "required"}
         subreadsConfigFile: {description: "Configuration file for the subreads processing.", category: "required"}
     }

@@ -2,7 +2,7 @@
   tags:
     - integration
   command: >
-    cromwell run 
+    cromwell run
     --options tests/data/config/cromwell.options.json
     --inputs tests/data/config/variant_calling.json
     PacBio-variantcalling.wdl
@@ -10,6 +10,8 @@
     contains_regex:
       - 'VariantCalling.SubreadsProcessing.outputLima.*batch_1_march.fl.Sample_1_3p--Sample_1_3p.bam'
       - 'VariantCalling.index.outputIndexFile.*LC029411.mmi'
+    contains:
+      - 'Starting VariantCalling.index'
   files:
     - path: test-output/Sample_1_3p.align.bam
     - path: test-output/Sample_1_3p.align.bam.bai
@@ -21,5 +23,20 @@
     - path: test-output/Sample_3_3p.vcf.gz.tbi
     - path: test-output/Sample_4_3p.align.bam
     - path: test-output/Sample_4_3p.align.bam.bai
+    - path: test-output/Sample_4_3p.vcf.gz
+    - path: test-output/Sample_4_3p.vcf.gz.tbi
+
+- name: test-workflow-mmi
+  tags:
+    - integration
+  command: >
+    cromwell run
+    --options tests/data/config/cromwell.options.json
+    --inputs tests/data/config/variant_calling_mmi_index.json
+    PacBio-variantcalling.wdl
+  stdout:
+    must_not_contain:
+      - 'Starting VariantCalling.index'
+  files:
     - path: test-output/Sample_4_3p.vcf.gz
     - path: test-output/Sample_4_3p.vcf.gz.tbi

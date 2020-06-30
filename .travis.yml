@@ -53,4 +53,8 @@ matrix:
     - env:
       - TEST="validate-workflow-settings"
     - env:
+      - TEST="validate-workflow-settings-mmi"
+    - env:
       - TEST="test-workflow"
+    - env:
+      - TEST="test-workflow-mmi"
