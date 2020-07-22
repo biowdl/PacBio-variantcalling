@@ -52,10 +52,10 @@ workflow VariantCalling {
       }
     }
 
-    File referenceMMI = select_first([referenceFileMMI, index.outputIndexFile])
+    File referenceMMI = select_first([referenceFileMMI, index.indexFile])
 
     # Combine the sample names with the bam files
-    Array[Pair[String, File]] SampleBam = zip(SubreadsProcessing.outputSamples, SubreadsProcessing.outputLima)
+    Array[Pair[String, File]] SampleBam = zip(SubreadsProcessing.samples, SubreadsProcessing.limaReads)
 
     scatter (pair in SampleBam) {
       call pbmm2.Mapping as mapping {
@@ -69,7 +69,7 @@ workflow VariantCalling {
       call gatk.HaplotypeCaller as gatk {
         input:
           inputBams = [mapping.outputAlignmentFile],
-          inputBamsIndex = [mapping.outputIndexFile],
+          inputBamsIndex = [mapping.indexFile],
           outputPath = pair.left + ".vcf.gz",
           referenceFasta = referenceFile,
           referenceFastaIndex = referenceFileIndex,
