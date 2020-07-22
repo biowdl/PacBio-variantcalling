@@ -21,7 +21,6 @@ version 1.0
 # SOFTWARE.
 
 import "PacBio-subreads-processing/PacBio-subreads-processing.wdl" as SubreadsProcessing
-
 import "tasks/gatk.wdl" as gatk
 import "tasks/minimap2.wdl" as minimap2
 import "tasks/pbmm2.wdl" as pbmm2
@@ -38,18 +37,18 @@ workflow VariantCalling {
     }
 
     call SubreadsProcessing.SubreadsProcessing as SubreadsProcessing {
-      input:
-        subreadsConfigFile = subreadsConfigFile,
-        dockerImagesFile = dockerImagesFile
+        input:
+            subreadsConfigFile = subreadsConfigFile,
+            dockerImagesFile = dockerImagesFile
     }
 
     if (!defined(referenceFileMMI)) {
-      call minimap2.Indexing as index {
-        input:
-          useHomopolymerCompressedKmer = true,
-          outputPrefix = referencePrefix,
-          referenceFile = referenceFile
-      }
+        call minimap2.Indexing as index {
+            input:
+                useHomopolymerCompressedKmer = true,
+                outputPrefix = referencePrefix,
+                referenceFile = referenceFile
+        }
     }
 
     File referenceMMI = select_first([referenceFileMMI, index.indexFile])
@@ -58,24 +57,25 @@ workflow VariantCalling {
     Array[Pair[String, File]] SampleBam = zip(SubreadsProcessing.samples, SubreadsProcessing.limaReads)
 
     scatter (pair in SampleBam) {
-      call pbmm2.Mapping as mapping {
-        input:
-          presetOption = "CCS",
-          sort = true,
-          referenceMMI = referenceMMI,
-          sample = pair.left,
-          queryFile = pair.right
-      }
-      call gatk.HaplotypeCaller as gatk {
-        input:
-          inputBams = [mapping.outputAlignmentFile],
-          inputBamsIndex = [mapping.indexFile],
-          outputPath = pair.left + ".vcf.gz",
-          referenceFasta = referenceFile,
-          referenceFastaIndex = referenceFileIndex,
-          gvcf = false,
-          referenceFastaDict = referenceFileDict
-      }
+        call pbmm2.Mapping as mapping {
+            input:
+                presetOption = "CCS",
+                sort = true,
+                referenceMMI = referenceMMI,
+                sample = pair.left,
+                queryFile = pair.right
+        }
+
+        call gatk.HaplotypeCaller as gatk {
+            input:
+                inputBams = [mapping.outputAlignmentFile],
+                inputBamsIndex = [mapping.outputIndexFile],
+                outputPath = pair.left + ".vcf.gz",
+                referenceFasta = referenceFile,
+                referenceFastaIndex = referenceFileIndex,
+                gvcf = false,
+                referenceFastaDict = referenceFileDict
+        }
     }
 
     parameter_meta {
