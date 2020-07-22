@@ -1,9 +1,7 @@
 # PacBio-variantcalling
-
 Variant calling workflow for targetted PacBio read data
 
 ## Documentation
-
 Documentation for this pipeline can be
 found [here](https://biowdl.github.io/PacBio-variantcalling).
 
