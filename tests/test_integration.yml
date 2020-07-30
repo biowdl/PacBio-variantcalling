@@ -40,3 +40,27 @@
   files:
     - path: test-output/Sample_4_3p.vcf.gz
     - path: test-output/Sample_4_3p.vcf.gz.tbi
+
+- name: test-workflow-CYP2D6-snp
+  tags:
+    - integration
+  command: >
+    cromwell run
+    --options tests/data/config/cromwell.options.json
+    --inputs tests/data/config/variant_calling_CYP2D6-snp.json
+    PacBio-variantcalling.wdl
+  files:
+    - path: test-output/sample1_pre_opt0_5x.vcf.gz
+      contains_regex:
+        - 'chr22\t42146152\t.\tT\tG\t.*\tGT:AD:DP:GQ:PL\t0/1:27,32:59'
+        - 'chr22\t42146869\t.\tA\tG\t.*\tGT:AD:DP:GQ:PL\t1/1:0,92:92'
+        - 'chr22\t42147016\t.\tC\tA\t.*\tGT:AD:DP:GQ:PL\t0/1:35,44:'
+        - 'chr22\t42147299\t.\tG\tA\t.*\tGT:AD:DP:GQ:PL\t1/1:0,91:91'
+        - 'chr22\t42147458\t.\tC\tT\t.*\tGT:AD:DP:GQ:PL\t0/1:37,44:81'
+        - 'chr22\t42147459\t.\tA\tG\t.*\tGT:AD:DP:GQ:PL\t0/1:37,44:81'
+        - 'chr22\t42147462\t.\tA\tG\t.*\tGT:AD:DP:GQ:PL\t0/1:37,44:81'
+        - 'chr22\t42147971\t.\tC\tT\t.*\tGT:AD:DP:GQ:PL\t0/1:53,50:103'
+        - 'chr22\t42148061\t.\tA\tG\t.*\tGT:AD:DP:GQ:PL\t0/1:51,55:106'
+        - 'chr22\t42148767\t.\tG\tA\t.*\tGT:AD:DP:GQ:PL\t0/1:49,50:99'
+        - 'chr22\t42149230\t.\tG\tA\t.*\tGT:AD:DP:GQ:PL\t0/1:43,47:90'
+        - 'chr22\t42155338\t.\tG\tA\t.*\tGT:AD:DP:GQ:PL\t0/1:9,4:13'
