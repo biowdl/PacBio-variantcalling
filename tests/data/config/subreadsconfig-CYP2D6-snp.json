@@ -1,0 +1,9 @@
+{
+    "subreads": [
+        {
+            "subreads_id": "sample1-CYP2D6",
+            "subreads_file": "tests/data/bam/sample1_pre_opt0_5x.align_CYP2D6_tp_snp.target.bam",
+            "barcodes_file": "tests/data/seq_barcodes.fasta"
+        }
+    ]
+}

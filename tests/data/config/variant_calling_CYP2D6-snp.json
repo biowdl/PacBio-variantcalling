@@ -1,0 +1,8 @@
+{
+    "VariantCalling.subreadsConfigFile": "tests/data/config/subreadsconfig-CYP2D6-snp.json",
+    "VariantCalling.referenceFile": "tests/data/reference/GCA_000001405.15_GRCh38_no_alt_analysis_set_chr22.fna",
+    "VariantCalling.referenceFileIndex": "tests/data/reference/GCA_000001405.15_GRCh38_no_alt_analysis_set_chr22.fna.fai",
+    "VariantCalling.referenceFileDict": "tests/data/reference/GCA_000001405.15_GRCh38_no_alt_analysis_set_chr22.dict",
+    "VariantCalling.referencePrefix": "GCA_000001405.15_GRCh38_no_alt_analysis_set_chr22",
+    "VariantCalling.dockerImagesFile": "dockerImages.yml"
+}
