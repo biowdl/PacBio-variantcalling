@@ -17,14 +17,17 @@
     - path: test-output/Sample_1_3p.align.bam.bai
     - path: test-output/Sample_1_3p.vcf.gz
     - path: test-output/Sample_1_3p.vcf.gz.tbi
+    - path: test-output/Sample_1_3p.g.vcf.gz
     - path: test-output/Sample_3_3p.align.bam
     - path: test-output/Sample_3_3p.align.bam.bai
     - path: test-output/Sample_3_3p.vcf.gz
     - path: test-output/Sample_3_3p.vcf.gz.tbi
+    - path: test-output/Sample_3_3p.g.vcf.gz
     - path: test-output/Sample_4_3p.align.bam
     - path: test-output/Sample_4_3p.align.bam.bai
     - path: test-output/Sample_4_3p.vcf.gz
     - path: test-output/Sample_4_3p.vcf.gz.tbi
+    - path: test-output/Sample_4_3p.g.vcf.gz
 
 - name: test-workflow-mmi
   tags:
@@ -40,3 +43,4 @@
   files:
     - path: test-output/Sample_4_3p.vcf.gz
     - path: test-output/Sample_4_3p.vcf.gz.tbi
+    - path: test-output/Sample_4_3p.g.vcf.gz

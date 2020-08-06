@@ -66,14 +66,24 @@ workflow VariantCalling {
                 queryFile = pair.right
         }
 
-        call gatk.HaplotypeCaller as gatk {
+        call gatk.HaplotypeCaller as gvcf {
             input:
                 inputBams = [mapping.outputAlignmentFile],
                 inputBamsIndex = [mapping.outputIndexFile],
-                outputPath = pair.left + ".vcf.gz",
+                outputPath = pair.left + ".g.vcf.gz",
                 referenceFasta = referenceFile,
                 referenceFastaIndex = referenceFileIndex,
-                gvcf = false,
+                gvcf = true,
+                referenceFastaDict = referenceFileDict
+        }
+
+        call gatk.GenotypeGVCFs as vcf {
+            input:
+                gvcfFile = gvcf.outputVCF,
+                gvcfFileIndex = gvcf.outputVCFIndex,
+                outputPath = pair.left + ".vcf.gz",
+                referenceFasta = referenceFile,
+                referenceFastaFai = referenceFileIndex,
                 referenceFastaDict = referenceFileDict
         }
     }
