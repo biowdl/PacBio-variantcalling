@@ -24,6 +24,7 @@ import "PacBio-subreads-processing/PacBio-subreads-processing.wdl" as SubreadsPr
 import "tasks/gatk.wdl" as gatk
 import "tasks/minimap2.wdl" as minimap2
 import "tasks/pbmm2.wdl" as pbmm2
+import "tasks/whatshap.wdl" as whatshap
 
 workflow VariantCalling {
     input {
@@ -86,6 +87,19 @@ workflow VariantCalling {
                 referenceFastaFai = referenceFileIndex,
                 referenceFastaDict = referenceFileDict
         }
+
+        call whatshap.Phase as Phase {
+            input:
+               vcf = vcf.outputVCF,
+               vcfIndex = vcf.outputVCFIndex,
+               phaseInput = mapping.outputAlignmentFile,
+               phaseInputIndex = mapping.outputIndexFile,
+               indels = true,
+               reference = referenceFile,
+               referenceIndex = referenceFileIndex,
+               outputVCF = pair.left + ".phased.vcf.gz"
+        }
+
     }
 
     parameter_meta {
