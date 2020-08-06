@@ -62,6 +62,7 @@ task Phase {
         Int timeMinutes = 120
         String dockerImage = "quay.io/biocontainers/whatshap:1.0--py37h9a982cc_1"
     }
+
     command {
         whatshap phase \
         ~{vcf} \
@@ -140,6 +141,61 @@ task Phase {
         vcf: {description: "VCF or BCF file with variants to be phased (can be gzip-compressed)", category: "required"}
         vcfIndex: {description: "Index for the VCF or BCF file with variants to be phased", category: "required"}
         phaseInput: {description: "BAM, CRAM, VCF or BCF file(s) with phase information, either through sequencing reads (BAM, CRAM) or through phased blocks (VCF, BCF)", category: "required"}
+        memory: {description: "The amount of memory this job will use.", category: "advanced"}
+        timeMinutes: {description: "The maximum amount of time the job will run in minutes.", category: "advanced"}
+        dockerImage: {description: "The docker image used for this task. Changing this may result in errors which the developers may choose not to address.", category: "advanced"}
+    }
+}
+
+task Stats {
+    input {
+        String? gtf
+        String? sample
+        String? chr_lengths
+        String? tsv
+        Boolean? only_sn_vs
+        String? block_list
+        String? chromosome
+        File vcf
+
+        String memory = "4G"
+        Int timeMinutes = 120
+        String dockerImage = "quay.io/biocontainers/whatshap:1.0--py37h9a982cc_1"
+      }
+
+    command {
+      whatshap stats \
+        ~{vcf} \
+        ~{if defined(gtf) then ("--gtf " +  '"' + gtf + '"') else ""} \
+        ~{if defined(sample) then ("--sample " +  '"' + sample + '"') else ""} \
+        ~{if defined(chr_lengths) then ("--chr-lengths " +  '"' + chr_lengths + '"') else ""} \
+        ~{if defined(tsv) then ("--tsv " +  '"' + tsv + '"') else ""} \
+        ~{true="--only-snvs" false="" only_sn_vs} \
+        ~{if defined(block_list) then ("--block-list " +  '"' + block_list + '"') else ""} \
+        ~{if defined(chromosome) then ("--chromosome " +  '"' + chromosome + '"') else ""}
+    }
+
+    output {
+      File? phasedGTF = gtf
+      File? phasedTSV = tsv
+      File? phasedBlockList = block_list
+    }
+
+    runtime {
+        docker: dockerImage
+        time_minutes: timeMinutes
+        memory: memory
+    }
+
+    parameter_meta {
+        gtf: "Write phased blocks to GTF file."
+        sample: "Name of the sample to process. If not given, use first sample found in VCF."
+        chr_lengths: "File with chromosome lengths (one line per chromosome, tab separated '<chr> <length>') needed to compute N50 values."
+        tsv: "Filename to write statistics to (tab-separated)."
+        only_sn_vs: "Only process SNVs and ignore all other variants."
+        block_list: "Filename to write list of all blocks to (one block per line)."
+        chromosome: "Name of chromosome to process. If not given, all chromosomes in the input VCF are considered."
+        vcf: "Phased VCF file"
         memory: {description: "The amount of memory this job will use.", category: "advanced"}
         timeMinutes: {description: "The maximum amount of time the job will run in minutes.", category: "advanced"}
         dockerImage: {description: "The docker image used for this task. Changing this may result in errors which the developers may choose not to address.", category: "advanced"}

@@ -88,7 +88,7 @@ workflow VariantCalling {
                 referenceFastaDict = referenceFileDict
         }
 
-        call whatshap.Phase as Phase {
+        call whatshap.Phase as phase {
             input:
                vcf = vcf.outputVCF,
                vcfIndex = vcf.outputVCFIndex,
@@ -100,6 +100,13 @@ workflow VariantCalling {
                outputVCF = pair.left + ".phased.vcf.gz"
         }
 
+        call whatshap.Stats as stats {
+            input:
+                vcf = phase.phasedVCF,
+                gtf = pair.left + ".phased.gtf",
+                tsv = pair.left + ".phased.tsv",
+                block_list = pair.left + ".phased.blocklist"
+        }
     }
 
     parameter_meta {
