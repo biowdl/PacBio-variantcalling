@@ -22,6 +22,7 @@
       contains:
         - "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSample_1_3p"
     - path: test-output/Sample_1_3p.haplotagged.bam
+    - path: test-output/Sample_1_3p.haplotagged.bam.bai
 
     - path: test-output/Sample_3_3p.align.bam
     - path: test-output/Sample_3_3p.align.bam.bai
@@ -32,6 +33,7 @@
       contains:
         - "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSample_3_3p"
     - path: test-output/Sample_3_3p.haplotagged.bam
+    - path: test-output/Sample_3_3p.haplotagged.bam.bai
 
     - path: test-output/Sample_4_3p.align.bam
     - path: test-output/Sample_4_3p.align.bam.bai
@@ -42,6 +44,7 @@
       contains:
         - "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSample_4_3p"
     - path: test-output/Sample_4_3p.haplotagged.bam
+    - path: test-output/Sample_4_3p.haplotagged.bam.bai
 
 - name: test-workflow-mmi
   tags:

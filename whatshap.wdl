@@ -241,11 +241,13 @@ task Haplotag {
           ~{true="--ignore-read-groups" false="" ignore_read_groups} \
           ~{if defined(sample) then ("--sample " +  '"' + sample + '"') else ""} \
           ~{if defined(output_haplo_tag_list) then ("--output-haplotag-list " +  '"' + output_haplo_tag_list + '"') else ""} \
-          ~{true="--tag-supplementary" false="" tag_supplementary}
+          ~{true="--tag-supplementary" false="" tag_supplementary} && \
+          python3 -c "import pysam; pysam.index('~{outputFile}')"
     }
 
     output {
       File bam = outputFile
+      File bamIndex = outputFile + ".bai"
     }
 
     runtime {
