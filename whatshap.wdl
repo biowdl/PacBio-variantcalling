@@ -208,7 +208,7 @@ task Stats {
 
 task Haplotag {
     input {
-        String? outputFile
+        String outputFile
         File? reference
         File? referenceFastaIndex
         String? regions
