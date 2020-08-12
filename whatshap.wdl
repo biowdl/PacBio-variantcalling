@@ -60,7 +60,8 @@ task Phase {
 
         String memory = "4G"
         Int timeMinutes = 120
-        String dockerImage = "quay.io/biocontainers/whatshap:1.0--py37h9a982cc_1"
+        # Whatshap 1.0, tabix 0.2.5
+        String dockerImage = "quay.io/biocontainers/mulled-v2-5c61fe1d8c284dd05d26238ce877aa323205bf82:89b4005d04552bdd268e8af323df83357e968d83-0"
     }
 
     command {
@@ -95,11 +96,13 @@ task Phase {
         ~{if defined(recomb_rate) then ("--recombrate " +  '"' + recomb_rate + '"') else ""} \
         ~{if defined(gen_map) then ("--genmap " +  '"' + gen_map + '"') else ""} \
         ~{true="--no-genetic-haplotyping" false="" no_genetic_haplo_typing} \
-        ~{true="--use-ped-samples" false="" use_ped_samples}
+        ~{true="--use-ped-samples" false="" use_ped_samples} && \
+        tabix -p vcf ~{outputVCF}
     }
 
     output {
         File phasedVCF = outputVCF
+        File phasedVCFIndex = outputVCF + ".tbi"
     }
 
     runtime {
@@ -160,7 +163,8 @@ task Stats {
 
         String memory = "4G"
         Int timeMinutes = 120
-        String dockerImage = "quay.io/biocontainers/whatshap:1.0--py37h9a982cc_1"
+        # Whatshap 1.0, tabix 0.2.5
+        String dockerImage = "quay.io/biocontainers/mulled-v2-5c61fe1d8c284dd05d26238ce877aa323205bf82:89b4005d04552bdd268e8af323df83357e968d83-0"
       }
 
     command {
@@ -196,6 +200,72 @@ task Stats {
         block_list: "Filename to write list of all blocks to (one block per line)."
         chromosome: "Name of chromosome to process. If not given, all chromosomes in the input VCF are considered."
         vcf: "Phased VCF file"
+        memory: {description: "The amount of memory this job will use.", category: "advanced"}
+        timeMinutes: {description: "The maximum amount of time the job will run in minutes.", category: "advanced"}
+        dockerImage: {description: "The docker image used for this task. Changing this may result in errors which the developers may choose not to address.", category: "advanced"}
+    }
+}
+
+task Haplotag {
+    input {
+        String? outputFile
+        File? reference
+        File? referenceFastaIndex
+        String? regions
+        Boolean? ignore_linked_read
+        String? linked_read_distance_cut_off
+        Boolean? ignore_read_groups
+        String? sample
+        String? output_haplo_tag_list
+        Boolean? tag_supplementary
+        File vcf
+        File vcfIndex
+        File alignments
+        File alignmentsIndex
+
+        String memory = "4G"
+        Int timeMinutes = 120
+        # Whatshap 1.0, tabix 0.2.5
+        String dockerImage = "quay.io/biocontainers/mulled-v2-5c61fe1d8c284dd05d26238ce877aa323205bf82:89b4005d04552bdd268e8af323df83357e968d83-0"
+    }
+
+    command {
+      whatshap haplotag \
+          ~{vcf} \
+          ~{alignments} \
+          ~{if defined(outputFile) then ("--output " +  '"' + outputFile+ '"') else ""} \
+          ~{if defined(reference) then ("--reference " +  '"' + reference + '"') else ""} \
+          ~{if defined(regions) then ("--regions " +  '"' + regions + '"') else ""} \
+          ~{true="--ignore-linked-read" false="" ignore_linked_read} \
+          ~{if defined(linked_read_distance_cut_off) then ("--linked-read-distance-cutoff " +  '"' + linked_read_distance_cut_off + '"') else ""} \
+          ~{true="--ignore-read-groups" false="" ignore_read_groups} \
+          ~{if defined(sample) then ("--sample " +  '"' + sample + '"') else ""} \
+          ~{if defined(output_haplo_tag_list) then ("--output-haplotag-list " +  '"' + output_haplo_tag_list + '"') else ""} \
+          ~{true="--tag-supplementary" false="" tag_supplementary}
+    }
+
+    output {
+      File bam = outputFile
+    }
+
+    runtime {
+        docker: dockerImage
+        time_minutes: timeMinutes
+        memory: memory
+    }
+
+    parameter_meta {
+        outputFile: "Output file. If omitted, use standard output."
+        reference: "Reference file. Provide this to detect alleles through re-alignment. If no index (.fai) exists, it will be created"
+        regions: "Specify region(s) of interest to limit the tagging to reads/variants overlapping those regions. You can specify a space-separated list of regions in the form of chrom:start-end, chrom (consider entire chromosome), or chrom:start (consider region from this start to end of chromosome)."
+        ignore_linked_read: "Ignore linkage information stored in BX tags of the reads."
+        linked_read_distance_cut_off: "Assume reads with identical BX tags belong to different read clouds if their distance is larger than LINKEDREADDISTANCE (default: 50000)."
+        ignore_read_groups: "Ignore read groups in BAM/CRAM header and assume all reads come from the same sample."
+        sample: "Name of a sample to phase. If not given, all samples in the input VCF are phased. Can be used multiple times."
+        output_haplo_tag_list: "Write assignments of read names to haplotypes (tab separated) to given output file. If filename ends in .gz, then output is gzipped."
+        tag_supplementary: "Also tag supplementary alignments. Supplementary alignments are assigned to the same haplotype the primary alignment has been assigned to (default: only tag primary alignments)."
+        vcf: "VCF file with phased variants (must be gzip-compressed and indexed)"
+        alignments: "File (BAM/CRAM) with read alignments to be tagged by haplotype"
         memory: {description: "The amount of memory this job will use.", category: "advanced"}
         timeMinutes: {description: "The maximum amount of time the job will run in minutes.", category: "advanced"}
         dockerImage: {description: "The docker image used for this task. Changing this may result in errors which the developers may choose not to address.", category: "advanced"}

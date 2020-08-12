@@ -107,6 +107,17 @@ workflow VariantCalling {
                 tsv = pair.left + ".phased.tsv",
                 block_list = pair.left + ".phased.blocklist"
         }
+
+        call whatshap.Haplotag as haplotag {
+            input:
+                outputFile = pair.left + ".haplotagged.bam",
+                reference = referenceFile,
+                referenceFastaIndex = referenceFileIndex,
+                vcf = phase.phasedVCF,
+                vcfIndex = phase.phasedVCFIndex,
+                alignments = mapping.outputAlignmentFile,
+                alignmentsIndex = mapping.outputIndexFile
+        }
     }
 
     parameter_meta {
