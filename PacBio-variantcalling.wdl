@@ -21,7 +21,7 @@ version 1.0
 # SOFTWARE.
 
 import "PacBio-subreads-processing/PacBio-subreads-processing.wdl" as SubreadsProcessing
-import "gatk.wdl" as gatk
+import "longshot.wdl" as longshot
 import "tasks/minimap2.wdl" as minimap2
 import "pbmm2.wdl" as pbmm2
 import "whatshap.wdl" as whatshap
@@ -67,56 +67,14 @@ workflow VariantCalling {
                 queryFile = pair.right
         }
 
-        call gatk.HaplotypeCaller as gvcf {
+        call longshot.Longshot as vcf {
             input:
-                inputBams = [mapping.outputAlignmentFile],
-                inputBamsIndex = [mapping.outputIndexFile],
-                outputPath = pair.left + ".g.vcf.gz",
-                referenceFasta = referenceFile,
-                referenceFastaIndex = referenceFileIndex,
-                gvcf = true,
-                referenceFastaDict = referenceFileDict
-        }
-
-        call gatk.GenotypeGVCFs as vcf {
-            input:
-                gvcfFile = gvcf.outputVCF,
-                gvcfFileIndex = gvcf.outputVCFIndex,
-                outputPath = pair.left + ".vcf.gz",
-                referenceFasta = referenceFile,
-                referenceFastaFai = referenceFileIndex,
-                referenceFastaDict = referenceFileDict
-        }
-
-        call whatshap.Phase as phase {
-            input:
-               vcf = vcf.outputVCF,
-               vcfIndex = vcf.outputVCFIndex,
-               phaseInput = mapping.outputAlignmentFile,
-               phaseInputIndex = mapping.outputIndexFile,
-               indels = true,
-               reference = referenceFile,
-               referenceIndex = referenceFileIndex,
-               outputVCF = pair.left + ".phased.vcf.gz"
-        }
-
-        call whatshap.Stats as stats {
-            input:
-                vcf = phase.phasedVCF,
-                gtf = pair.left + ".phased.gtf",
-                tsv = pair.left + ".phased.tsv",
-                block_list = pair.left + ".phased.blocklist"
-        }
-
-        call whatshap.Haplotag as haplotag {
-            input:
-                outputFile = pair.left + ".haplotagged.bam",
-                reference = referenceFile,
-                referenceFastaIndex = referenceFileIndex,
-                vcf = phase.phasedVCF,
-                vcfIndex = phase.phasedVCFIndex,
-                alignments = mapping.outputAlignmentFile,
-                alignmentsIndex = mapping.outputIndexFile
+                inputBam = mapping.outputAlignmentFile,
+                inputBamIndex = mapping.outputIndexFile,
+                referenceFile = referenceFile,
+                referenceFileIndex = referenceFileIndex,
+                outputPath = pair.left + ".phased.vcf",
+                outputBamPath = pair.left + ".haplotagged.bam",
         }
     }
 
