@@ -27,16 +27,15 @@ task RunDeepVariant {
         File inputBam
         File inputBamIndex
         String modelType
-        String outputVCF
+        String outputVcf
         File? customizedModel
         Int? numShards
-        String? outputGVCF
+        String? outputGVcf
         File? regions
         String? sampleName
         Boolean? VCFStatsReport = true
 
         String memory = "3G"
-        String javaXmx = "2G"
         Int timeMinutes = 5
         String dockerImage = "google/deepvariant:0.10.0"
     }
@@ -48,8 +47,8 @@ task RunDeepVariant {
         --ref ~{referenceFasta} \
         --reads ~{inputBam} \
         --model_type ~{modelType} \
-        --output_vcf ~{outputVCF} \
-        ~{"--output_gvcf " + outputGVCF} \
+        --output_vcf ~{outputVcf} \
+        ~{"--output_gvcf " + outputGVcf} \
         ~{"--customized_model " + customizedModel} \
         ~{"--num_shards " + numShards} \
         ~{"--regions} " + regions} \
@@ -64,9 +63,9 @@ task RunDeepVariant {
     }
 
     output {
-        File outputVCF = outputVCF
+        File outputVCF = outputVcf
         File outputVCFIndex = outputVCF + ".tbi"
-        File? outputGVCF = outputGVCF
+        File? outputGVCF = outputGVcf
         Array[File] outputVCFStatsReport = glob("*.visual_report.html")
     }
     
@@ -76,10 +75,10 @@ task RunDeepVariant {
         inputBam: {description: "Aligned, sorted, indexed BAM file containing the reads we want to call.", category: "required"}
         inputBamIndex: {description: "Index for the input bam file.", category: "required"}
         modelType: {description: "<WGS|WES|PACBIO>. Type of model to use for variant calling. Each model_type has an associated default model, which can be overridden by the --customized_model flag", category: "required"}
-        outputVCF: {description: "Path where we should write VCF file.", category: "required"}
+        outputVcf: {description: "Path where we should write VCF file.", category: "required"}
         customizedModel: {description: "A path to a model checkpoint to load for the `call_variants` step. If not set, the default for each --model_type will be used", category: "advanced"}
         numShards: {description: "Number of shards for make_examples step.", category: "common"}
-        outputGVCF: {description: "Path where we should write gVCF file.", category: "common"}
+        outputGVcf: {description: "Path where we should write gVCF file.", category: "common"}
         regions: {description: "List of regions we want to process, in BED/BEDPE format.", category: "advanced"}
         sampleName: {description: "Sample name to use instead of the sample name from the input reads BAM (SM tag in the header).", category: "common"}
         VCFStatsReport: {description: "Output a visual report (HTML) of statistics about the output VCF.", category: "common"}

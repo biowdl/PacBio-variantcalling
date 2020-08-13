@@ -74,8 +74,8 @@ workflow VariantCalling {
                 inputBam = mapping.outputAlignmentFile,
                 inputBamIndex = mapping.outputIndexFile,
                 modelType = "PACBIO",
-                outputVCF = pair.left + ".vcf.gz",
-                outputGVCF = pair.left + ".g.vcf.gz"
+                outputVcf = pair.left + ".vcf.gz",
+                outputGVcf = pair.left + ".g.vcf.gz"
         }
 
         call whatshap.Phase as phase {
