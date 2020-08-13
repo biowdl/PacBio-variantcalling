@@ -66,7 +66,7 @@ task RunDeepVariant {
     output {
         File outputVCF = outputVCF
         File outputVCFIndex = outputVCF + ".tbi"
-        File outputGVCF = outputGVCF
+        File? outputGVCF = outputGVCF
         Array[File] outputVCFStatsReport = glob("*.visual_report.html")
     }
     
