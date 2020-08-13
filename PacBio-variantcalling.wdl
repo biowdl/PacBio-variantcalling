@@ -21,7 +21,7 @@ version 1.0
 # SOFTWARE.
 
 import "PacBio-subreads-processing/PacBio-subreads-processing.wdl" as SubreadsProcessing
-import "gatk.wdl" as gatk
+import "deepvariant.wdl" as deepvariant
 import "tasks/minimap2.wdl" as minimap2
 import "pbmm2.wdl" as pbmm2
 import "whatshap.wdl" as whatshap
@@ -67,25 +67,15 @@ workflow VariantCalling {
                 queryFile = pair.right
         }
 
-        call gatk.HaplotypeCaller as gvcf {
+        call deepvariant.RunDeepVariant as vcf {
             input:
-                inputBams = [mapping.outputAlignmentFile],
-                inputBamsIndex = [mapping.outputIndexFile],
-                outputPath = pair.left + ".g.vcf.gz",
                 referenceFasta = referenceFile,
                 referenceFastaIndex = referenceFileIndex,
-                gvcf = true,
-                referenceFastaDict = referenceFileDict
-        }
-
-        call gatk.GenotypeGVCFs as vcf {
-            input:
-                gvcfFile = gvcf.outputVCF,
-                gvcfFileIndex = gvcf.outputVCFIndex,
-                outputPath = pair.left + ".vcf.gz",
-                referenceFasta = referenceFile,
-                referenceFastaFai = referenceFileIndex,
-                referenceFastaDict = referenceFileDict
+                inputBam = mapping.outputAlignmentFile,
+                inputBamIndex = mapping.outputIndexFile,
+                modelType = "PACBIO",
+                outputVCF = pair.left + ".vcf.gz",
+                outputGVCF = pair.left + ".g.vcf.gz"
         }
 
         call whatshap.Phase as phase {
