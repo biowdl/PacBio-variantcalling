@@ -15,9 +15,6 @@
   files:
     - path: test-output/Sample_1_3p.align.bam
     - path: test-output/Sample_1_3p.align.bam.bai
-    - path: test-output/Sample_1_3p.vcf.gz
-    - path: test-output/Sample_1_3p.vcf.gz.tbi
-    - path: test-output/Sample_1_3p.g.vcf.gz
     - path: test-output/Sample_1_3p.phased.vcf.gz
       contains:
         - "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSample_1_3p"
@@ -26,9 +23,6 @@
 
     - path: test-output/Sample_3_3p.align.bam
     - path: test-output/Sample_3_3p.align.bam.bai
-    - path: test-output/Sample_3_3p.vcf.gz
-    - path: test-output/Sample_3_3p.vcf.gz.tbi
-    - path: test-output/Sample_3_3p.g.vcf.gz
     - path: test-output/Sample_3_3p.phased.vcf.gz
       contains:
         - "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSample_3_3p"
@@ -37,9 +31,6 @@
 
     - path: test-output/Sample_4_3p.align.bam
     - path: test-output/Sample_4_3p.align.bam.bai
-    - path: test-output/Sample_4_3p.vcf.gz
-    - path: test-output/Sample_4_3p.vcf.gz.tbi
-    - path: test-output/Sample_4_3p.g.vcf.gz
     - path: test-output/Sample_4_3p.phased.vcf.gz
       contains:
         - "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSample_4_3p"
@@ -58,9 +49,6 @@
     must_not_contain:
       - 'Starting VariantCalling.index'
   files:
-    - path: test-output/Sample_4_3p.vcf.gz
-    - path: test-output/Sample_4_3p.vcf.gz.tbi
-    - path: test-output/Sample_4_3p.g.vcf.gz
     - path: test-output/Sample_4_3p.phased.vcf.gz
     - path: test-output/Sample_4_3p.phased.gtf
     - path: test-output/Sample_4_3p.phased.tsv

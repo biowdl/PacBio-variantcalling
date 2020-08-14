@@ -75,6 +75,12 @@ workflow VariantCalling {
                 referenceFileIndex = referenceFileIndex,
                 outputPath = pair.left + ".phased.vcf",
                 outputBamPath = pair.left + ".haplotagged.bam",
+                sampleID = pair.left
+        }
+
+        call tabix as indexVCF {
+            input:
+                inputVCF = vcf.outputVCF
         }
     }
 
@@ -87,5 +93,34 @@ workflow VariantCalling {
         referenceFileMMI: {description: "The minimap2 mmi file for the reference.", category: "optional"}
         dockerImagesFile: {description: "The docker image used for this workflow. Changing this may result in errors which the developers may choose not to address.", category: "required"}
         subreadsConfigFile: {description: "Configuration file for the subreads processing.", category: "required"}
+    }
+}
+
+task tabix {
+    input {
+        File inputVCF
+
+        String memory = "3G"
+        Int timeMinutes = 5
+        String dockerImage = "quay.io/biocontainers/htslib:1.10.2--hd3b49d5_1"
+
+        String filenameVCF = basename(inputVCF)
+    }
+
+    command {
+        set -e
+        bgzip --stdout ~{inputVCF} > ~{filenameVCF}.gz
+        tabix -p vcf ~{filenameVCF}.gz
+    }
+
+    runtime {
+        docker: dockerImage
+        time_minutes: timeMinutes
+        memory: memory
+    }
+
+    output {
+        File outputVCF = filenameVCF + ".gz"
+        File outputVCFINdex = filenameVCF + ".gz.tbi"
     }
 }

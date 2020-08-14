@@ -7,6 +7,7 @@ task Longshot {
         File referenceFile
         File referenceFileIndex
         String outputPath
+        String sampleID
         String? outputBamPath
 
         String memory = "3G"
@@ -18,10 +19,11 @@ task Longshot {
         set -e
 
         longshot \
-        ~{if defined(outputBamPath) then ("--out_bam " +  '"' + outputBamPath+ '"') else ""} \
         --bam ~{inputBam} \
         --ref ~{referenceFile} \
         --out ~{outputPath} \
+        ~{if defined(outputBamPath) then "-O " +  outputBamPath  else ""} \
+        --sample_id ~{sampleID}
     }
 
     runtime {
@@ -29,6 +31,7 @@ task Longshot {
         time_minutes: timeMinutes
         memory: memory
     }
+
     output {
         File outputVCF = outputPath
     }
@@ -40,6 +43,7 @@ task Longshot {
         referenceFileIndex: "Index for the referenceFile"
         outputPath: "output VCF file with called variants."
         outputBamPath: "Write new bam file with haplotype tags (HP:i:1 and HP:i:2) for reads assigned to each haplotype, any existing HP and PS tags are removed"
+        sampleID: "Specify a sample ID to write to the output VCF"
         memory: {description: "The amount of memory this job will use.", category: "advanced"}
         timeMinutes: {description: "The maximum amount of time the job will run in minutes.", category: "advanced"}
         dockerImage: {description: "The docker image used for this task. Changing this may result in errors which the developers may choose not to address.",
