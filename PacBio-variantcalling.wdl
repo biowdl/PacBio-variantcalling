@@ -78,7 +78,7 @@ workflow VariantCalling {
                 sampleID = pair.left
         }
 
-        call tabix as indexVCF {
+        call tabix as VCFindex {
             input:
                 inputVCF = vcf.outputVCF
         }
