@@ -104,8 +104,9 @@ task tabix {
         Int timeMinutes = 5
         String dockerImage = "quay.io/biocontainers/htslib:1.10.2--hd3b49d5_1"
 
-        String filenameVCF = basename(inputVCF)
     }
+
+    String filenameVCF = basename(inputVCF)
 
     command {
         set -e
@@ -122,5 +123,13 @@ task tabix {
     output {
         File outputVCF = filenameVCF + ".gz"
         File outputVCFINdex = filenameVCF + ".gz.tbi"
+    }
+
+    parameter_meta {
+        inputVCF: {description: "VCF file to index", category: "required"}
+        memory: {description: "The amount of memory this job will use.", category: "advanced"}
+        timeMinutes: {description: "The maximum amount of time the job will run in minutes.", category: "advanced"}
+        dockerImage: {description: "The docker image used for this task. Changing this may result in errors which the developers may choose not to address.",
+                      category: "advanced"}
     }
 }
