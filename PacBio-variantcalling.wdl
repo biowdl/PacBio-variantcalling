@@ -40,6 +40,8 @@ workflow VariantCalling {
     call SubreadsProcessing.SubreadsProcessing as SubreadsProcessing {
         input:
             subreadsConfigFile = subreadsConfigFile,
+            limaCores = 8,
+            ccsCores = 8,
             dockerImagesFile = dockerImagesFile
     }
 

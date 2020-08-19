@@ -12,6 +12,7 @@
       - 'VariantCalling.index.indexFile.*LC029411.mmi'
     contains:
       - 'Starting VariantCalling.index'
+      - '--num-threads 8'
   files:
     - path: test-output/Sample_1_3p.align.bam
     - path: test-output/Sample_1_3p.align.bam.bai
