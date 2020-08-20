@@ -21,10 +21,35 @@ version 1.0
 # SOFTWARE.
 
 import "PacBio-subreads-processing/PacBio-subreads-processing.wdl" as SubreadsProcessing
-import "gatk.wdl" as gatk
 import "tasks/minimap2.wdl" as minimap2
 import "pbmm2.wdl" as pbmm2
 import "whatshap.wdl" as whatshap
+import "sniffles.wdl" as sniffles
+import "ngmlr.wdl" as ngmlr
+import "tasks/picard.wdl" as picard
+import "tasks/samtools.wdl" as samtools
+import "bcftools.wdl" as bcftools
+
+task write_samplename {
+    input {
+        String sample
+        String dockerImage = "quay.io/biocontainers/bcftools:1.10.2--h4f4756c_2"
+        String memory = "256M"
+    }
+
+    command {
+        echo ~{sample} > ~{sample}.txt
+    }
+
+    runtime {
+        docker: dockerImage
+        memory: memory
+    }
+
+    output {
+        File file = sample + ".txt"
+    }
+}
 
 workflow VariantCalling {
     input {
@@ -42,6 +67,7 @@ workflow VariantCalling {
             subreadsConfigFile = subreadsConfigFile,
             limaCores = 8,
             ccsCores = 8,
+            generateFastq = true,
             dockerImagesFile = dockerImagesFile
     }
 
@@ -56,46 +82,59 @@ workflow VariantCalling {
 
     File referenceMMI = select_first([referenceFileMMI, index.indexFile])
 
-    # Combine the sample names with the bam files
-    Array[Pair[String, File]] SampleBam = zip(SubreadsProcessing.samples, SubreadsProcessing.limaReads)
+    # Combine the sample names with the fastq files
+    Array[Pair[String, File]] SampleFastq= zip(SubreadsProcessing.samples, select_all(SubreadsProcessing.fastqFiles))
 
-    scatter (pair in SampleBam) {
-        call pbmm2.Mapping as mapping {
+    scatter (pair in SampleFastq) {
+        call ngmlr.Ngmlr as ngmlr {
             input:
-                presetOption = "CCS",
-                sort = true,
-                referenceMMI = referenceMMI,
-                sample = pair.left,
-                queryFile = pair.right
+                referenceFile = referenceFile,
+                queryFile = pair.right,
+                outputPath = pair.left + ".sam",
+                bamFix = true,
+                rg_sm = pair.left,
+                presets = "pacbio"
         }
 
-        call gatk.HaplotypeCaller as gvcf {
+        call picard.SortSam as toBam {
             input:
-                inputBams = [mapping.outputAlignmentFile],
-                inputBamsIndex = [mapping.outputIndexFile],
-                outputPath = pair.left + ".g.vcf.gz",
-                referenceFasta = referenceFile,
-                referenceFastaIndex = referenceFileIndex,
-                gvcf = true,
-                referenceFastaDict = referenceFileDict
+                inputBam = ngmlr.outputAlignmentFile,
+                outputPath = pair.left + ".align.bam"
         }
 
-        call gatk.GenotypeGVCFs as vcf {
+        call sniffles.Sniffles as sniffles {
             input:
-                gvcfFile = gvcf.outputVCF,
-                gvcfFileIndex = gvcf.outputVCFIndex,
-                outputPath = pair.left + ".vcf.gz",
-                referenceFasta = referenceFile,
-                referenceFastaFai = referenceFileIndex,
-                referenceFastaDict = referenceFileDict
+                inputBam = toBam.outputBam,
+                inputBamIndex = toBam.outputBamIndex,
+                outputPath = pair.left + ".vcf"
         }
+
+        call write_samplename {
+            input: sample = pair.left
+        }
+
+        call bcftools.Reheader as reheader {
+            input:
+                inputVCF = sniffles.outputVCF,
+                outputFile = pair.left + ".reheader.vcf",
+                samples = write_samplename.file
+        }
+
+        call samtools.BgzipAndIndex as bgzip {
+            input:
+                inputFile = reheader.outputVCF,
+                outputDir = pair.left
+        }
+
+        File compressedVCF = bgzip.compressed
+        File compressedVCFIndex = bgzip.index
 
         call whatshap.Phase as phase {
             input:
-               vcf = vcf.outputVCF,
-               vcfIndex = vcf.outputVCFIndex,
-               phaseInput = mapping.outputAlignmentFile,
-               phaseInputIndex = mapping.outputIndexFile,
+               vcf = compressedVCF,
+               vcfIndex = compressedVCFIndex,
+               phaseInput = toBam.outputBam,
+               phaseInputIndex = toBam.outputBamIndex,
                indels = true,
                reference = referenceFile,
                referenceIndex = referenceFileIndex,
@@ -117,8 +156,10 @@ workflow VariantCalling {
                 referenceFastaIndex = referenceFileIndex,
                 vcf = phase.phasedVCF,
                 vcfIndex = phase.phasedVCFIndex,
-                alignments = mapping.outputAlignmentFile,
-                alignmentsIndex = mapping.outputIndexFile
+                alignments = toBam.outputBam,
+                # https://github.com/philres/ngmlr/issues/43
+                ignore_read_groups = true,
+                alignmentsIndex = toBam.outputBamIndex
         }
     }
 

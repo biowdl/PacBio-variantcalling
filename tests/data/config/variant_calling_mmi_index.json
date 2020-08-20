@@ -5,5 +5,5 @@
     "VariantCalling.referenceFileIndex": "tests/data/reference/LC029411.fasta.fai",
     "VariantCalling.referenceFileDict": "tests/data/reference/LC029411.dict",
     "VariantCalling.referencePrefix": "LC029411",
-    "VariantCalling.dockerImagesFile": "dockerImages.yml"
+    "VariantCalling.dockerImagesFile": "PacBio-subreads-processing/dockerImages.yml"
 }
