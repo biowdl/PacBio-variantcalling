@@ -130,7 +130,7 @@ workflow VariantCalling {
 
         call samtools.BgzipAndIndex as bgzip {
             input:
-                inputFile = reheader.outputVCF,
+                inputFile = sort.outputVCF,
                 outputDir = pair.left
         }
 
