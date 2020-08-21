@@ -120,6 +120,14 @@ workflow VariantCalling {
                 samples = write_samplename.file
         }
 
+        # The vcf output from sniffles can be out of order
+        # https://github.com/fritzsedlazeck/Sniffles/issues/218
+        call bcftools.Sort as sort {
+            input:
+                inputVCF = reheader.outputVCF,
+                outputFile = pair.left + ".sorted.vcf"
+        }
+
         call samtools.BgzipAndIndex as bgzip {
             input:
                 inputFile = reheader.outputVCF,

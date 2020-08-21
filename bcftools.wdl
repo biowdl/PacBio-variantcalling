@@ -75,33 +75,33 @@ task Stats {
         String outputPath = basename(inputVcf) + ".stats"
         String? afBins
         String? afTag
-        Boolean firstAlleleOnly = false 
+        Boolean firstAlleleOnly = false
         String? collapse
         String? depth
         String? exclude
-        File? exons 
+        File? exons
         String? applyFilters
         File? fastaRef
         File? fastaRefIndex
-        String? include 
-        Boolean splitByID = false 
+        String? include
+        Boolean splitByID = false
         String? regions
         File? regionsFile
         Array[String] samples = []
-        File? samplesFile 
-        String? targets 
+        File? samplesFile
+        String? targets
         File? targetsFile
         String? userTsTv
         Boolean verbose = false
 
         Int threads = 0
         Int timeMinutes = 1 + 2* ceil(size(select_all([inputVcf, compareVcf]), "G"))  # TODO: Estimate, 2 minutes per GB, refine later.
-        String memory = "256M" 
+        String memory = "256M"
         String dockerImage = "quay.io/biocontainers/bcftools:1.10.2--h4f4756c_2"
     }
-    
+
     command {
-        set -e 
+        set -e
         mkdir -p $(dirname ~{outputPath})
         bcftools stats \
         ~{"--af-bins " + afBins} \
@@ -183,7 +183,7 @@ task Reheader{
         String dockerImage = "quay.io/biocontainers/bcftools:1.10.2--h4f4756c_2"
         String memory = "256M"
     }
-    
+
     command {
         bcftools reheader \
         ~{if defined(fai) then ("--fai " +  '"' + fai + '"') else ""} \
@@ -209,5 +209,48 @@ task Reheader{
         outputFile: "write output to this file"
         samples: "new sample names"
         threads: "use multithreading with <int> worker threads (BCF only) [0]"
+        memory: "Maximum memory to use"
+        dockerImage: "Docker image to use"
   }
+}
+
+task Sort {
+    input {
+        File inputVCF
+        String outputFile
+        Float? max_mem
+        String? output_type
+        String? temp_dir
+
+        String dockerImage = "quay.io/biocontainers/bcftools:1.10.2--h4f4756c_2"
+        String memory = "256M"
+    }
+
+    command {
+        bcftools sort \
+        ~{inputVCF} \
+        ~{if defined(max_mem) then ("--max-mem " +  '"' + max_mem + '"') else ""} \
+        ~{if defined(outputFile) then ("--output-file " +  '"' + outputFile + '"') else ""} \
+        ~{if defined(output_type) then ("--output-type " +  '"' + output_type + '"') else ""} \
+        ~{if defined(temp_dir) then ("--temp-dir " +  '"' + temp_dir + '"') else ""}
+    }
+
+    output {
+        File outputVCF = outputFile
+    }
+
+    runtime {
+        memory: memory
+        docker: dockerImage
+    }
+
+    parameter_meta {
+        max_mem: "[kMG]    maximum memory to use [768M]"
+        outputFile: "output file name"
+        output_type: "b: compressed BCF, u: uncompressed BCF, z: compressed VCF, v: uncompressed VCF [v]"
+        temp_dir: "temporary files [/tmp/bcftools-sort.XXXXXX]"
+        inputVCF: "Input vcf file"
+        memory: "Maximum memory to use"
+        dockerImage: "Docker image to use"
+    }
 }
