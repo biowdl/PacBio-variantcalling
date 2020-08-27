@@ -72,7 +72,7 @@ workflow VariantCalling {
         }
 
         if (!useDeepVariant) {
-            call gatk.HaplotypeCaller as gvcf {
+            call gatk.HaplotypeCaller as gvcf{
                 input:
                     inputBams = [mapping.outputAlignmentFile],
                     inputBamsIndex = [mapping.outputIndexFile],
@@ -83,7 +83,7 @@ workflow VariantCalling {
                     referenceFastaDict = referenceFileDict
             }
 
-            call gatk.GenotypeGVCFs as vcf {
+            call gatk.GenotypeGVCFs as gatkVCF {
                 input:
                     gvcfFile = gvcf.outputVCF,
                     gvcfFileIndex = gvcf.outputVCFIndex,
@@ -94,8 +94,21 @@ workflow VariantCalling {
             }
         }
 
-        File outputVCF = select_first([vcf.outputVCF])
-        File outputVCFIndex = select_first([vcf.outputVCFIndex])
+        if (useDeepVariant) {
+            call deepvariant.RunDeepVariant as DeepVariant{
+                input:
+                    referenceFasta = referenceFile,
+                    referenceFastaIndex = referenceFileIndex,
+                    inputBam = mapping.outputAlignmentFile,
+                    inputBamIndex = mapping.outputIndexFile,
+                    modelType = "PACBIO",
+                    outputVcf = pair.left + ".vcf.gz",
+                    outputGVcf = pair.left + ".g.vcf.gz"
+            }
+        }
+
+        File outputVCF = select_first([gatkVCF.outputVCF, DeepVariant.outputVCF])
+        File outputVCFIndex = select_first([gatkVCF.outputVCFIndex, DeepVariant.outputVCFIndex])
 
         call whatshap.Phase as phase {
             input:

@@ -58,6 +58,31 @@
   stdout:
     must_not_contain:
       - 'Starting VariantCalling.index'
+      - '/opt/deepvariant/bin/run_deepvariant'
+  files:
+    - path: test-output/Sample_4_3p.vcf.gz
+    - path: test-output/Sample_4_3p.vcf.gz.tbi
+    - path: test-output/Sample_4_3p.g.vcf.gz
+    - path: test-output/Sample_4_3p.phased.vcf.gz
+    - path: test-output/Sample_4_3p.phased.gtf
+    - path: test-output/Sample_4_3p.phased.tsv
+    - path: test-output/Sample_4_3p.phased.blocklist
+
+- name: test-workflow-DeepVariant
+  tags:
+    - integration
+  command: >
+    cromwell run
+    --options tests/data/config/cromwell.options.json
+    --inputs tests/data/config/variant_calling_DeepVariant.json
+    PacBio-variantcalling.wdl
+  stdout:
+    must_not_contain:
+      - 'Starting VariantCalling.index'
+      - 'HaplotypeCaller'
+    contains:
+      - '/opt/deepvariant/bin/run_deepvariant'
+
   files:
     - path: test-output/Sample_4_3p.vcf.gz
     - path: test-output/Sample_4_3p.vcf.gz.tbi
