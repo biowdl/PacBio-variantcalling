@@ -21,6 +21,7 @@ version 1.0
 # SOFTWARE.
 
 import "PacBio-subreads-processing/PacBio-subreads-processing.wdl" as SubreadsProcessing
+import "deepvariant.wdl" as deepvariant
 import "gatk.wdl" as gatk
 import "tasks/minimap2.wdl" as minimap2
 import "pbmm2.wdl" as pbmm2
@@ -35,6 +36,7 @@ workflow VariantCalling {
         File referenceFileDict
         File? referenceFileMMI
         String referencePrefix
+        Boolean useDeepVariant = false
     }
 
     call SubreadsProcessing.SubreadsProcessing as SubreadsProcessing {
@@ -69,31 +71,36 @@ workflow VariantCalling {
                 queryFile = pair.right
         }
 
-        call gatk.HaplotypeCaller as gvcf {
-            input:
-                inputBams = [mapping.outputAlignmentFile],
-                inputBamsIndex = [mapping.outputIndexFile],
-                outputPath = pair.left + ".g.vcf.gz",
-                referenceFasta = referenceFile,
-                referenceFastaIndex = referenceFileIndex,
-                gvcf = true,
-                referenceFastaDict = referenceFileDict
+        if (!useDeepVariant) {
+            call gatk.HaplotypeCaller as gvcf {
+                input:
+                    inputBams = [mapping.outputAlignmentFile],
+                    inputBamsIndex = [mapping.outputIndexFile],
+                    outputPath = pair.left + ".g.vcf.gz",
+                    referenceFasta = referenceFile,
+                    referenceFastaIndex = referenceFileIndex,
+                    gvcf = true,
+                    referenceFastaDict = referenceFileDict
+            }
+
+            call gatk.GenotypeGVCFs as vcf {
+                input:
+                    gvcfFile = gvcf.outputVCF,
+                    gvcfFileIndex = gvcf.outputVCFIndex,
+                    outputPath = pair.left + ".vcf.gz",
+                    referenceFasta = referenceFile,
+                    referenceFastaFai = referenceFileIndex,
+                    referenceFastaDict = referenceFileDict
+            }
         }
 
-        call gatk.GenotypeGVCFs as vcf {
-            input:
-                gvcfFile = gvcf.outputVCF,
-                gvcfFileIndex = gvcf.outputVCFIndex,
-                outputPath = pair.left + ".vcf.gz",
-                referenceFasta = referenceFile,
-                referenceFastaFai = referenceFileIndex,
-                referenceFastaDict = referenceFileDict
-        }
+        File outputVCF = select_first([vcf.outputVCF])
+        File outputVCFIndex = select_first([vcf.outputVCFIndex])
 
         call whatshap.Phase as phase {
             input:
-               vcf = vcf.outputVCF,
-               vcfIndex = vcf.outputVCFIndex,
+               vcf = outputVCF,
+               vcfIndex = outputVCFIndex,
                phaseInput = mapping.outputAlignmentFile,
                phaseInputIndex = mapping.outputIndexFile,
                indels = true,
@@ -131,5 +138,6 @@ workflow VariantCalling {
         referenceFileMMI: {description: "The minimap2 mmi file for the reference.", category: "optional"}
         dockerImagesFile: {description: "The docker image used for this workflow. Changing this may result in errors which the developers may choose not to address.", category: "required"}
         subreadsConfigFile: {description: "Configuration file for the subreads processing.", category: "required"}
+        useDeepVariant: {description: "Use DeepVariant caller, the default is to use GATK4", category: "common"}
     }
 }
