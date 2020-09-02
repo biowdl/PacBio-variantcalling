@@ -109,6 +109,8 @@ workflow VariantCalling {
 
         File outputVCF = select_first([gatkVCF.outputVCF, DeepVariant.outputVCF])
         File outputVCFIndex = select_first([gatkVCF.outputVCFIndex, DeepVariant.outputVCFIndex])
+        File outputGVCF = select_first([gvcf.outputVCF, DeepVariant.outputGVCF])
+        File outputGVCFIndex = select_first([gvcf.outputVCFIndex, DeepVariant.outputGVCFIndex])
 
         call whatshap.Phase as phase {
             input:
@@ -141,6 +143,19 @@ workflow VariantCalling {
                 alignmentsIndex = mapping.outputIndexFile
         }
     }
+
+    output {
+        Array[File] phasedVCF = phase.phasedVCF
+        Array[File] phasedVCFIndex = phase.phasedVCFIndex
+        Array[File] phasedBAM = haplotag.bam
+        Array[File] phasedBAMIndex = haplotag.bamIndex
+        Array[File?] phasedGTF = stats.phasedGTF
+        Array[File?] phasedTSV = stats.phasedTSV
+        Array[File?] phasedBlocklist = stats.phasedBlockList
+        Array[File] GVCF = outputGVCF
+        Array[File] GVCFINdex = outputGVCFIndex
+    }
+
 
     parameter_meta {
         # inputs
