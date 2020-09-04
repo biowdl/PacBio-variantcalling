@@ -8,44 +8,31 @@
     PacBio-variantcalling.wdl
   stdout:
     contains_regex:
-      - 'VariantCalling.SubreadsProcessing.limaReads.*batch_1_march.fl.Sample_1_3p--Sample_1_3p.bam'
-      - 'VariantCalling.index.indexFile.*LC029411.mmi'
+      - 'SubreadsProcessing.limaReads.*batch_1_march.fl.Sample_1_3p--Sample_1_3p.bam'
+      - 'Starting VariantCalling.index'
     contains:
       - 'Starting VariantCalling.index'
       - '--num-threads 8'
   files:
-    - path: test-output/Sample_1_3p.align.bam
-    - path: test-output/Sample_1_3p.align.bam.bai
-    - path: test-output/Sample_1_3p.vcf.gz
-    - path: test-output/Sample_1_3p.vcf.gz.tbi
     - path: test-output/Sample_1_3p.g.vcf.gz
+    - path: test-output/Sample_1_3p.g.vcf.gz.tbi
+    - path: test-output/Sample_1_3p.phased.vcf.gz.tbi
+    - path: test-output/Sample_1_3p.haplotagged.bam
+    - path: test-output/Sample_1_3p.haplotagged.bam.bai
+    - path: test-output/Sample_1_3p.phased.blocklist
+    - path: test-output/Sample_1_3p.phased.gtf
+    - path: test-output/Sample_1_3p.phased.tsv
     - path: test-output/Sample_1_3p.phased.vcf.gz
       contains:
         - "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSample_1_3p"
-    - path: test-output/Sample_1_3p.haplotagged.bam
-    - path: test-output/Sample_1_3p.haplotagged.bam.bai
 
-    - path: test-output/Sample_3_3p.align.bam
-    - path: test-output/Sample_3_3p.align.bam.bai
-    - path: test-output/Sample_3_3p.vcf.gz
-    - path: test-output/Sample_3_3p.vcf.gz.tbi
-    - path: test-output/Sample_3_3p.g.vcf.gz
     - path: test-output/Sample_3_3p.phased.vcf.gz
       contains:
         - "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSample_3_3p"
-    - path: test-output/Sample_3_3p.haplotagged.bam
-    - path: test-output/Sample_3_3p.haplotagged.bam.bai
 
-    - path: test-output/Sample_4_3p.align.bam
-    - path: test-output/Sample_4_3p.align.bam.bai
-    - path: test-output/Sample_4_3p.vcf.gz
-    - path: test-output/Sample_4_3p.vcf.gz.tbi
-    - path: test-output/Sample_4_3p.g.vcf.gz
     - path: test-output/Sample_4_3p.phased.vcf.gz
       contains:
         - "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSample_4_3p"
-    - path: test-output/Sample_4_3p.haplotagged.bam
-    - path: test-output/Sample_4_3p.haplotagged.bam.bai
 
 - name: test-workflow-mmi
   tags:
@@ -60,8 +47,6 @@
       - 'Starting VariantCalling.index'
       - '/opt/deepvariant/bin/run_deepvariant'
   files:
-    - path: test-output/Sample_4_3p.vcf.gz
-    - path: test-output/Sample_4_3p.vcf.gz.tbi
     - path: test-output/Sample_4_3p.g.vcf.gz
     - path: test-output/Sample_4_3p.phased.vcf.gz
     - path: test-output/Sample_4_3p.phased.gtf
@@ -84,10 +69,12 @@
       - '/opt/deepvariant/bin/run_deepvariant'
 
   files:
-    - path: test-output/Sample_4_3p.vcf.gz
-    - path: test-output/Sample_4_3p.vcf.gz.tbi
     - path: test-output/Sample_4_3p.g.vcf.gz
+    - path: test-output/Sample_4_3p.g.vcf.gz.tbi
     - path: test-output/Sample_4_3p.phased.vcf.gz
+    - path: test-output/Sample_4_3p.phased.vcf.gz.tbi
+    - path: test-output/Sample_4_3p.haplotagged.bam
+    - path: test-output/Sample_4_3p.haplotagged.bam.bai
     - path: test-output/Sample_4_3p.phased.gtf
     - path: test-output/Sample_4_3p.phased.tsv
     - path: test-output/Sample_4_3p.phased.blocklist
