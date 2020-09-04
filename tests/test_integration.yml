@@ -33,6 +33,9 @@
     - path: test-output/Sample_4_3p.phased.vcf.gz
       contains:
         - "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSample_4_3p"
+    - path: test-output/multiqc/multiqc_report.html
+      contains:
+        - "Alignment Summary"
 
 - name: test-workflow-mmi
   tags:

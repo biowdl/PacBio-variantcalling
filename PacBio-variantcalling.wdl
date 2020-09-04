@@ -27,6 +27,7 @@ import "tasks/minimap2.wdl" as minimap2
 import "tasks/picard.wdl" as picard
 import "pbmm2.wdl" as pbmm2
 import "whatshap.wdl" as whatshap
+import "tasks/multiqc.wdl" as multiqc
 
 workflow VariantCalling {
     input {
@@ -72,7 +73,7 @@ workflow VariantCalling {
                 queryFile = pair.right
         }
 
-        call picard.CollectMultipleMetrics as metrics {
+        call picard.CollectMultipleMetrics as multiple_metrics {
             input:
                 inputBam = mapping.outputAlignmentFile,
                 inputBamIndex = mapping.outputIndexFile,
@@ -158,6 +159,15 @@ workflow VariantCalling {
         }
     }
 
+    Array[File] qualityReports = select_all(multiple_metrics.alignmentSummary)
+
+    call multiqc.MultiQC as multiqc {
+        input:
+            reports = qualityReports,
+            outDir = "multiqc",
+            dataDir = true
+    }
+
     output {
         Array[File] phasedVCF = phase.phasedVCF
         Array[File] phasedVCFIndex = phase.phasedVCFIndex
@@ -168,6 +178,7 @@ workflow VariantCalling {
         Array[File?] phasedBlocklist = stats.phasedBlockList
         Array[File] GVCF = outputGVCF
         Array[File] GVCFINdex = outputGVCFIndex
+        File multiQC = multiqc.multiqcReport
     }
 
 
