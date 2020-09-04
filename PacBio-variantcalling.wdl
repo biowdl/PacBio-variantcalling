@@ -24,7 +24,7 @@ import "PacBio-subreads-processing/PacBio-subreads-processing.wdl" as SubreadsPr
 import "deepvariant.wdl" as deepvariant
 import "gatk.wdl" as gatk
 import "tasks/minimap2.wdl" as minimap2
-import "tasks/picard.wdl" as picard
+import "picard.wdl" as picard
 import "pbmm2.wdl" as pbmm2
 import "whatshap.wdl" as whatshap
 import "tasks/multiqc.wdl" as multiqc
@@ -39,6 +39,8 @@ workflow VariantCalling {
         File? referenceFileMMI
         String referencePrefix
         Boolean useDeepVariant = false
+        File? dbsnp
+        File? dbsnpIndex
     }
 
     call SubreadsProcessing.SubreadsProcessing as SubreadsProcessing {
@@ -137,6 +139,17 @@ workflow VariantCalling {
                reference = referenceFile,
                referenceIndex = referenceFileIndex,
                outputVCF = pair.left + ".phased.vcf.gz"
+        }
+
+        if (defined(dbsnp)) {
+            call picard.CollectVariantCallingMetrics as vcfMetrics {
+                input:
+                    dbsnp = select_first([dbsnp]),
+                    dbsnpIndex = select_first([dbsnpIndex]),
+                    inputVCF = phase.phasedVCF,
+                    inputVCFIndex = phase.phasedVCFIndex,
+                    basename = pair.left
+            }
         }
 
         call whatshap.Stats as stats {

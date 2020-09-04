@@ -1,0 +1,11 @@
+{
+    "VariantCalling.subreadsConfigFile": "tests/data/config/subreadsconfig.json",
+    "VariantCalling.referenceFile": "tests/data/reference/LC029411.fasta",
+    "VariantCalling.referenceFileMMI": "tests/data/reference/LC029411.mmi",
+    "VariantCalling.referenceFileIndex": "tests/data/reference/LC029411.fasta.fai",
+    "VariantCalling.referenceFileDict": "tests/data/reference/LC029411.dict",
+    "VariantCalling.referencePrefix": "LC029411",
+    "VariantCalling.dbsnp": "tests/data/reference/LC029411.dbsnp.vcf.gz",
+    "VariantCalling.dbsnpIndex": "tests/data/reference/LC029411.dbsnp.vcf.gz.tbi",
+    "VariantCalling.dockerImagesFile": "dockerImages.yml"
+}

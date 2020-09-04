@@ -82,3 +82,12 @@
     - path: test-output/Sample_4_3p.phased.gtf
     - path: test-output/Sample_4_3p.phased.tsv
     - path: test-output/Sample_4_3p.phased.blocklist
+
+- name: test-workflow-dbsnp
+  tags:
+    - integration
+  command: >
+    cromwell run
+    --options tests/data/config/cromwell.options.json
+    --inputs tests/data/config/variant_calling_dbsnp.json
+    PacBio-variantcalling.wdl
