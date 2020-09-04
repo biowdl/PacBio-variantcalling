@@ -24,6 +24,7 @@ import "PacBio-subreads-processing/PacBio-subreads-processing.wdl" as SubreadsPr
 import "deepvariant.wdl" as deepvariant
 import "gatk.wdl" as gatk
 import "tasks/minimap2.wdl" as minimap2
+import "tasks/picard.wdl" as picard
 import "pbmm2.wdl" as pbmm2
 import "whatshap.wdl" as whatshap
 
@@ -69,6 +70,19 @@ workflow VariantCalling {
                 referenceMMI = referenceMMI,
                 sample = pair.left,
                 queryFile = pair.right
+        }
+
+        call picard.CollectMultipleMetrics as metrics {
+            input:
+                inputBam = mapping.outputAlignmentFile,
+                inputBamIndex = mapping.outputIndexFile,
+                referenceFasta = referenceFile,
+                referenceFastaDict = referenceFileDict,
+                referenceFastaFai = referenceFileIndex,
+                basename = pair.left,
+                collectInsertSizeMetrics = false,
+                meanQualityByCycle = false,
+                collectBaseDistributionByCycle = false
         }
 
         if (!useDeepVariant) {
