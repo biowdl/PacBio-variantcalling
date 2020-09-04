@@ -73,7 +73,7 @@ workflow VariantCalling {
                 queryFile = pair.right
         }
 
-        call picard.CollectMultipleMetrics as multiple_metrics {
+        call picard.CollectMultipleMetrics as picard_multiple_metrics {
             input:
                 inputBam = mapping.outputAlignmentFile,
                 inputBamIndex = mapping.outputIndexFile,
@@ -159,7 +159,11 @@ workflow VariantCalling {
         }
     }
 
-    Array[File] qualityReports = select_all(multiple_metrics.alignmentSummary)
+    Array[File] qualityReports = flatten([
+            select_all(picard_multiple_metrics.alignmentSummary),
+            select_all(picard_multiple_metrics.qualityDistribution),
+            select_all(picard_multiple_metrics.gcBiasDetail)
+    ])
 
     call multiqc.MultiQC as multiqc {
         input:

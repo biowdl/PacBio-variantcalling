@@ -36,6 +36,7 @@
     - path: test-output/multiqc/multiqc_report.html
       contains:
         - "Alignment Summary"
+        - "GC Coverage Bias"
 
 - name: test-workflow-mmi
   tags:
