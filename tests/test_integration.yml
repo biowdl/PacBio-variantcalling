@@ -91,3 +91,19 @@
     --options tests/data/config/cromwell.options.json
     --inputs tests/data/config/variant_calling_dbsnp.json
     PacBio-variantcalling.wdl
+
+- name: test-workflow-hsmetric
+  tags:
+    - integration
+  command: >
+    cromwell run
+    --options tests/data/config/cromwell.options.json
+    --inputs tests/data/config/variant_calling_hsmetric.json
+    PacBio-variantcalling.wdl
+  files:
+    - path: test-output/multiqc/multiqc_report.html
+      contains:
+        - "Alignment Summary"
+        - "GC Coverage Bias"
+        - "HSMetrics"
+        - "Target Region Coverage"

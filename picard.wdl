@@ -99,7 +99,7 @@ task CollectHsMetrics {
         R=~{referenceFasta} \
         BAIT_INTERVALS=~{baitsFile} \
         TARGET_INTERVALS=~{targetsFile} \
-        O=~{basename} \
+        O="~{basename}.hs_metrics.txt"
     }
 
     output {

@@ -42,6 +42,7 @@ workflow VariantCalling {
         File? dbsnp
         File? dbsnpIndex
         File? targetInterval
+        File? targetBaits
     }
 
     call SubreadsProcessing.SubreadsProcessing as SubreadsProcessing {
@@ -90,7 +91,7 @@ workflow VariantCalling {
         }
         
         if (defined(targetInterval)) {
-            call picard.CollectHsMetrics {
+            call picard.CollectHsMetrics as picard_hs_metrics {
                 input:
                     inputBam = mapping.outputAlignmentFile,
                     inputBamIndex = mapping.outputIndexFile,
@@ -98,7 +99,8 @@ workflow VariantCalling {
                     referenceFastaDict = referenceFileDict,
                     referenceFastaFai = referenceFileIndex,
                     basename = pair.left,
-                    targets = select_first([targetInterval])
+                    targets = select_first([targetInterval]),
+                    baits = targetBaits
             }
         }
 
@@ -189,7 +191,8 @@ workflow VariantCalling {
     Array[File] qualityReports = flatten([
             select_all(picard_multiple_metrics.alignmentSummary),
             select_all(picard_multiple_metrics.qualityDistribution),
-            select_all(picard_multiple_metrics.gcBiasDetail)
+            select_all(picard_multiple_metrics.gcBiasDetail),
+            select_all(picard_hs_metrics.HsMetrics)
     ])
 
     call multiqc.MultiQC as multiqc {
