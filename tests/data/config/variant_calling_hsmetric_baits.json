@@ -1,0 +1,11 @@
+{
+    "VariantCalling.subreadsConfigFile": "tests/data/config/subreadsconfig.json",
+    "VariantCalling.referenceFile": "tests/data/reference/LC029411.fasta",
+    "VariantCalling.referenceFileMMI": "tests/data/reference/LC029411.mmi",
+    "VariantCalling.referenceFileIndex": "tests/data/reference/LC029411.fasta.fai",
+    "VariantCalling.referenceFileDict": "tests/data/reference/LC029411.dict",
+    "VariantCalling.targetInterval": "tests/data/reference/LC029411.targets.interval",
+    "VariantCalling.targetBaits": "tests/data/reference/LC029411.baits.interval",
+    "VariantCalling.referencePrefix": "LC029411",
+    "VariantCalling.dockerImagesFile": "dockerImages.yml"
+}

@@ -100,6 +100,32 @@
     --options tests/data/config/cromwell.options.json
     --inputs tests/data/config/variant_calling_hsmetric.json
     PacBio-variantcalling.wdl
+  stdout:
+    contains_regex:
+      - 'BAIT_INTERVALS=.*LC029411.targets.interval'
+      - 'TARGET_INTERVALS=.*LC029411.targets.interval'
+  files:
+    - path: test-output/multiqc/multiqc_report.html
+      contains:
+        - "Alignment Summary"
+        - "GC Coverage Bias"
+        - "HSMetrics"
+        - "Target Region Coverage"
+
+- name: test-workflow-hsmetric-baits
+  tags:
+    - integration
+  command: >
+    cromwell run
+    --options tests/data/config/cromwell.options.json
+    --inputs tests/data/config/variant_calling_hsmetric_baits.json
+    PacBio-variantcalling.wdl
+  stdout:
+    contains_regex:
+      - 'BAIT_INTERVALS=.*LC029411.baits.interval'
+      - 'TARGET_INTERVALS=.*LC029411.targets.interval'
+    must_not_contain_regex:
+      - 'BAIT_INTERVALS=.*LC029411.targets.interval'
   files:
     - path: test-output/multiqc/multiqc_report.html
       contains:
