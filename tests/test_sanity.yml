@@ -74,3 +74,14 @@
   stdout:
     contains:
       - "Success!"
+
+- name: validate-workflow-settings-hsmetric
+  tags:
+    - sanity
+  command: >
+    womtool validate
+    --inputs tests/data/config/variant_calling_hsmetric.json
+    PacBio-variantcalling.wdl
+  stdout:
+    contains:
+      - "Success!"

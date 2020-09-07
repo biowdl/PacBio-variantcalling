@@ -41,6 +41,7 @@ workflow VariantCalling {
         Boolean useDeepVariant = false
         File? dbsnp
         File? dbsnpIndex
+        File? targetInterval
     }
 
     call SubreadsProcessing.SubreadsProcessing as SubreadsProcessing {
@@ -86,6 +87,19 @@ workflow VariantCalling {
                 collectInsertSizeMetrics = false,
                 meanQualityByCycle = false,
                 collectBaseDistributionByCycle = false
+        }
+        
+        if (defined(targetInterval)) {
+            call picard.CollectHsMetrics {
+                input:
+                    inputBam = mapping.outputAlignmentFile,
+                    inputBamIndex = mapping.outputIndexFile,
+                    referenceFasta = referenceFile,
+                    referenceFastaDict = referenceFileDict,
+                    referenceFastaFai = referenceFileIndex,
+                    basename = pair.left,
+                    targets = select_first([targetInterval])
+            }
         }
 
         if (!useDeepVariant) {
