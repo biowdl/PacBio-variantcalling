@@ -20,7 +20,7 @@ before_install:
   - conda config --add channels conda-forge
 
 stages:
-  - lint
+  #- lint
   - test
 
 stage: test
@@ -48,13 +48,7 @@ matrix:
     #   script: bash scripts/biowdl_lint.sh
     #   after_failure:
     #     - echo "Linting failed"
-     - env:
-      - TEST="validate-workflow-wdl"
     - env:
-      - TEST="validate-workflow-settings"
+      - TEST="sanity"
     - env:
-      - TEST="validate-workflow-settings-mmi"
-    - env:
-      - TEST="test-workflow"
-    - env:
-      - TEST="test-workflow-mmi"
+      - TEST="integration"
