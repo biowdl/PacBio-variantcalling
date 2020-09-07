@@ -41,14 +41,14 @@ after_failure:
 
 matrix:
   include:
-    - env: TEST="validate"
-      stage: lint
-      install:
-        - conda install cromwell miniwdl wdl-aid
-      script: bash scripts/biowdl_lint.sh
-      after_failure:
-        - echo "Linting failed"
-    - env:
+    # - env: TEST="validate"
+    #   stage: lint
+    #   install:
+    #     - conda install cromwell miniwdl wdl-aid
+    #   script: bash scripts/biowdl_lint.sh
+    #   after_failure:
+    #     - echo "Linting failed"
+     - env:
       - TEST="validate-workflow-wdl"
     - env:
       - TEST="validate-workflow-settings"
