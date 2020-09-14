@@ -199,6 +199,7 @@ workflow VariantCalling {
         input:
             reports = qualityReports,
             outDir = "multiqc",
+            dataFormat = "json",
             dataDir = true
     }
 
@@ -213,6 +214,7 @@ workflow VariantCalling {
         Array[File] GVCF = outputGVCF
         Array[File] GVCFINdex = outputGVCFIndex
         File multiQC = multiqc.multiqcReport
+        File multiqcDataDirZip  = select_first([multiqc.multiqcDataDirZip])
     }
 
 

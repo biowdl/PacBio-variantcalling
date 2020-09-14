@@ -133,3 +133,4 @@
         - "GC Coverage Bias"
         - "HSMetrics"
         - "Target Region Coverage"
+    - path: test-output/multiqc/multiqc_report.zip
