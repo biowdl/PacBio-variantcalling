@@ -135,6 +135,7 @@ workflow VariantCalling {
                     inputBam = mapping.outputAlignmentFile,
                     inputBamIndex = mapping.outputIndexFile,
                     modelType = "PACBIO",
+                    sampleName = pair.left,
                     outputVcf = pair.left + ".vcf.gz",
                     outputGVcf = pair.left + ".g.vcf.gz"
             }

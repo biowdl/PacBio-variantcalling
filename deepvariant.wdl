@@ -36,8 +36,8 @@ task RunDeepVariant {
         Boolean? VCFStatsReport = true
 
         String memory = "3G"
-        Int timeMinutes = 5
-        String dockerImage = "google/deepvariant:0.10.0"
+        Int timeMinutes = 5000
+        String dockerImage = "google/deepvariant:1.0.0"
     }
 
     command {
@@ -52,7 +52,7 @@ task RunDeepVariant {
         ~{"--customized_model " + customizedModel} \
         ~{"--num_shards " + numShards} \
         ~{"--regions} " + regions} \
-        ~{"--sample_name" + sampleName} \
+        ~{"--sample_name " + sampleName} \
         ~{true="--vcf_stats_report" false="--novcf_stats_report" VCFStatsReport}
     }
 
