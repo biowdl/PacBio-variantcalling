@@ -20,7 +20,7 @@ version 1.0
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import "PacBio-subreads-processing/PacBio-subreads-processing.wdl" as SubreadsProcessing
+import "PacBio-subreads-processing/pacbio-subreads-processing.wdl" as SubreadsProcessing
 import "deepvariant.wdl" as deepvariant
 import "gatk.wdl" as gatk
 import "tasks/minimap2.wdl" as minimap2
@@ -49,8 +49,7 @@ workflow VariantCalling {
         input:
             subreadsConfigFile = subreadsConfigFile,
             limaCores = 8,
-            ccsCores = 8,
-            dockerImagesFile = dockerImagesFile
+            ccsCores = 8
     }
 
     if (!defined(referenceFileMMI)) {
