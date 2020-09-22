@@ -27,15 +27,15 @@ import "tasks/minimap2.wdl" as minimap2
 import "picard.wdl" as picard
 import "pbmm2.wdl" as pbmm2
 import "whatshap.wdl" as whatshap
-import "tasks/multiqc.wdl" as multiqc
+import "multiqc_pgx.wdl" as multiqc
 
 workflow VariantCalling {
     input {
         File subreadsConfigFile
-        File dockerImagesFile
         File referenceFile
         File referenceFileIndex
         File referenceFileDict
+        File limaBarcodes
         File? referenceFileMMI
         String referencePrefix
         Boolean useDeepVariant = false
@@ -204,7 +204,7 @@ workflow VariantCalling {
             reports = qualityReports,
             outDir = "multiqc",
             dataFormat = "json",
-            dockerImage = "lumc/multiqc_pgx:1.10.dev0",
+            limaBarcodes = limaBarcodes,
             dataDir = true
     }
 
@@ -230,7 +230,6 @@ workflow VariantCalling {
         referenceFileIndex: {description: "The samtools index file for the reference.", category: "required"}
         referenceFileDict: {description: "The picard dictionary file for the reference.", category: "required"}
         referenceFileMMI: {description: "The minimap2 mmi file for the reference.", category: "optional"}
-        dockerImagesFile: {description: "The docker image used for this workflow. Changing this may result in errors which the developers may choose not to address.", category: "required"}
         subreadsConfigFile: {description: "Configuration file for the subreads processing.", category: "required"}
         useDeepVariant: {description: "Use DeepVariant caller, the default is to use GATK4", category: "common"}
     }

@@ -7,5 +7,5 @@
     "VariantCalling.targetInterval": "tests/data/reference/LC029411.targets.interval",
     "VariantCalling.targetBaits": "tests/data/reference/LC029411.baits.interval",
     "VariantCalling.referencePrefix": "LC029411",
-    "VariantCalling.dockerImagesFile": "dockerImages.yml"
+    "VariantCalling.limaBarcodes": "tests/data/config/lima-barcodes.txt"
 }
