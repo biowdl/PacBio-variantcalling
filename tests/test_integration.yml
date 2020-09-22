@@ -40,6 +40,12 @@
         - "Aligned Reads"
         - "Aligned Bases"
         - "Mean Read Length"
+        - "ZMWs filtered and passed"
+        - "Counts"
+        - "MeanScore"
+        - "ZMWs filtered by Lima"
+        - "block_n50"
+        - "variant_per_block_avg"
 
 - name: test-workflow-mmi
   tags:

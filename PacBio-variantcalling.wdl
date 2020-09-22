@@ -192,7 +192,11 @@ workflow VariantCalling {
             select_all(picard_multiple_metrics.alignmentSummary),
             select_all(picard_multiple_metrics.qualityDistribution),
             select_all(picard_multiple_metrics.gcBiasDetail),
-            select_all(picard_hs_metrics.HsMetrics)
+            select_all(picard_hs_metrics.HsMetrics),
+            select_all(SubreadsProcessing.ccsReport),
+            select_all(SubreadsProcessing.limaCounts),
+            select_all(SubreadsProcessing.limaSummary),
+            select_all(stats.phasedTSV),
     ])
 
     call multiqc.MultiQC as multiqc {
