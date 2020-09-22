@@ -37,6 +37,9 @@
       contains:
         - "Alignment Summary"
         - "GC Coverage Bias"
+        - "Aligned Reads"
+        - "Aligned Bases"
+        - "Mean Read Length"
 
 - name: test-workflow-mmi
   tags:

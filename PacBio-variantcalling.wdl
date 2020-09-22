@@ -200,6 +200,7 @@ workflow VariantCalling {
             reports = qualityReports,
             outDir = "multiqc",
             dataFormat = "json",
+            dockerImage = "lumc/multiqc_pgx:1.10.dev0",
             dataDir = true
     }
 
