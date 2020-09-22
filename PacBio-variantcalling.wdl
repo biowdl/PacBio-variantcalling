@@ -35,7 +35,7 @@ workflow VariantCalling {
         File referenceFile
         File referenceFileIndex
         File referenceFileDict
-        File limaBarcodes
+        File? limaBarcodes
         File? referenceFileMMI
         String referencePrefix
         Boolean useDeepVariant = false

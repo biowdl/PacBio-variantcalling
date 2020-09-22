@@ -69,6 +69,11 @@
     - path: test-output/Sample_4_3p.phased.gtf
     - path: test-output/Sample_4_3p.phased.tsv
     - path: test-output/Sample_4_3p.phased.blocklist
+    - path: test-output/multiqc/multiqc_report.html
+      contains:
+        - "Sample_1_3p--Sample_1_3p"
+        - "Sample_3_3p--Sample_3_3p"
+        - "Sample_4_3p--Sample_4_3p"
 
 - name: test-workflow-DeepVariant
   tags:
