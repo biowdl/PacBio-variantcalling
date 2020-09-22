@@ -36,6 +36,7 @@ workflow VariantCalling {
         File referenceFileIndex
         File referenceFileDict
         File? limaBarcodes
+        File? targetGenes
         File? referenceFileMMI
         String referencePrefix
         Boolean useDeepVariant = false
@@ -205,6 +206,8 @@ workflow VariantCalling {
             outDir = "multiqc",
             dataFormat = "json",
             limaBarcodes = limaBarcodes,
+            targetGenes = targetGenes,
+            whatshapBlocklist = select_all(stats.phasedBlockList),
             dataDir = true
     }
 

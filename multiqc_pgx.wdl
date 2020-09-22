@@ -50,6 +50,8 @@ task MultiQC {
         Boolean pdf = false
         Boolean megaQCUpload = false # This must be actively enabled in my opinion. The tools default is to upload.
         File? limaBarcodes
+        File? targetGenes
+        Array[File]? whatshapBlocklist
         File? config  # A directory
         String? clConfig
         String? memory
@@ -108,6 +110,8 @@ task MultiQC {
         ~{"--sample-names " + sampleNames} \
         ~{"--file-list " + fileList} \
         ~{"--lima-barcodes " + limaBarcodes} \
+        ~{"--target-genes " + targetGenes} \
+        ~{true="--whatshap-blocklist " false="" defined(whatshapBlocklist)}~{sep=" --whatshap-blocklist " whatshapBlocklist} \
         ~{true="--exclude " false="" defined(exclude)}~{sep=" --exclude " exclude} \
         ~{true="--module " false="" defined(module)}~{sep=" --module " module} \
         ~{true="--data-dir" false="--no-data-dir" dataDir} \
