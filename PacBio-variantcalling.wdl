@@ -68,6 +68,9 @@ workflow VariantCalling {
     Array[Pair[String, File]] SampleBam = zip(SubreadsProcessing.samples, SubreadsProcessing.limaReads)
 
     scatter (pair in SampleBam) {
+        # We need to know the order of the samples for MultiQC_PGx
+        String sampleName = pair.left
+
         call pbmm2.Mapping as mapping {
             input:
                 presetOption = "CCS",
@@ -208,6 +211,7 @@ workflow VariantCalling {
             limaBarcodes = limaBarcodes,
             targetGenes = targetGenes,
             whatshapBlocklist = select_all(stats.phasedBlockList),
+            whatshapSamples = sampleName,
             dataDir = true
     }
 

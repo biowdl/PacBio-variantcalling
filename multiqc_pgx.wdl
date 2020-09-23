@@ -40,6 +40,7 @@ task MultiQC {
         File? fileList
         Array[String]+? exclude
         Array[String]+? module
+        Array[String]? whatshapSamples
         Boolean dataDir = false
         String? dataFormat
         Boolean zipDataDir = true
@@ -55,8 +56,9 @@ task MultiQC {
         File? config  # A directory
         String? clConfig
         String? memory
+
         Int timeMinutes = 2 + ceil(size(reports, "G") * 8)
-        String dockerImage = "lumc/multiqc_pgx:1.10.dev0"
+        String dockerImage = "lumc/multiqc_pgx:1.10.dev2"
     }
     Int memoryGb = 2 + ceil(size(reports, "G"))
 
@@ -112,6 +114,7 @@ task MultiQC {
         ~{"--lima-barcodes " + limaBarcodes} \
         ~{"--target-genes " + targetGenes} \
         ~{true="--whatshap-blocklist " false="" defined(whatshapBlocklist)}~{sep=" --whatshap-blocklist " whatshapBlocklist} \
+        ~{true="--whatshap-sample " false="" defined(whatshapSamples)}~{sep=" --whatshap-sample " whatshapSamples} \
         ~{true="--exclude " false="" defined(exclude)}~{sep=" --exclude " exclude} \
         ~{true="--module " false="" defined(module)}~{sep=" --module " module} \
         ~{true="--data-dir" false="--no-data-dir" dataDir} \

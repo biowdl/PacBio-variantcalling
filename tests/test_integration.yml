@@ -46,6 +46,11 @@
         - "ZMWs filtered by Lima"
         - "block_n50"
         - "variant_per_block_avg"
+        - "Phasing per sample"
+        - "Phasing per Gene"
+        - "PGx"
+        - "Minor_capsid_protein"
+        - "Large_T_antigen"
       must_not_contain:
         - "Sample_1_3p--Sample_1_3p"
         - "Sample_3_3p--Sample_3_3p"
@@ -74,6 +79,14 @@
         - "Sample_1_3p--Sample_1_3p"
         - "Sample_3_3p--Sample_3_3p"
         - "Sample_4_3p--Sample_4_3p"
+        - "block_n50"
+        - "variant_per_block_avg"
+      must_not_contain:
+        - "Phasing per sample"
+        - "Phasing per Gene"
+        - "PGx"
+        - "Minor_capsid_protein"
+        - "Large_T_antigen"
 
 - name: test-workflow-DeepVariant
   tags:
