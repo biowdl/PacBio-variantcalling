@@ -46,7 +46,7 @@
         - "ZMWs filtered by Lima"
         - "block_n50"
         - "variant_per_block_avg"
-        - "Phasing per sample"
+        - "Phasing per Sample"
         - "Phasing per Gene"
         - "PGx"
         - "Minor_capsid_protein"
