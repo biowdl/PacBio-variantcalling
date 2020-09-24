@@ -50,7 +50,8 @@ workflow VariantCalling {
         input:
             subreadsConfigFile = subreadsConfigFile,
             limaCores = 8,
-            ccsCores = 8
+            ccsCores = 8,
+            ccsChunks = 20
     }
 
     if (!defined(referenceFileMMI)) {
