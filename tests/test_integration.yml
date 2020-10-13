@@ -8,7 +8,7 @@
     PacBio-variantcalling.wdl
   stdout:
     contains_regex:
-      - 'SubreadsProcessing.limaReads.*batch_1_march.fl.Sample_1_3p--Sample_1_3p.bam'
+      - 'SubreadsProcessing.limaReads.*batch.1.march.Sample_1_3p--Sample_1_3p.bam'
       - 'Starting VariantCalling.index'
     contains:
       - 'Starting VariantCalling.index'

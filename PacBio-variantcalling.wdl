@@ -31,7 +31,8 @@ import "multiqc_pgx.wdl" as multiqc
 
 workflow VariantCalling {
     input {
-        File subreadsConfigFile
+        File subreadsFile
+        File barcodesFasta
         File referenceFile
         File referenceFileIndex
         File referenceFileDict
@@ -48,7 +49,8 @@ workflow VariantCalling {
 
     call SubreadsProcessing.SubreadsProcessing as SubreadsProcessing {
         input:
-            subreadsConfigFile = subreadsConfigFile,
+            subreadsFile = subreadsFile,
+            barcodesFasta = barcodesFasta,
             limaCores = 8,
             ccsCores = 8,
             ccsChunks = 20
@@ -198,9 +200,9 @@ workflow VariantCalling {
             select_all(picard_multiple_metrics.qualityDistribution),
             select_all(picard_multiple_metrics.gcBiasDetail),
             select_all(picard_hs_metrics.HsMetrics),
-            select_all(SubreadsProcessing.ccsReport),
-            select_all(SubreadsProcessing.limaCounts),
-            select_all(SubreadsProcessing.limaSummary),
+            [SubreadsProcessing.ccsReport],
+            [SubreadsProcessing.limaCounts],
+            [SubreadsProcessing.limaSummary],
             select_all(stats.phasedTSV),
     ])
 

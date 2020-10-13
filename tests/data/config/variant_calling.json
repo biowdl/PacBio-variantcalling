@@ -1,5 +1,7 @@
 {
-    "VariantCalling.subreadsConfigFile": "tests/data/config/subreadsconfig.json",
+    "VariantCalling.subreadsFile": "PacBio-subreads-processing/tests/data/batch.1.march.subreads.bam",
+    "VariantCalling.barcodesFasta": "PacBio-subreads-processing/tests/data/batch.1.march.barcodes.fasta",
+    "VariantCalling.barcodesFasta": "PacBio-subreads-processing/tests/data/batch.1.march.barcodes.fasta",
     "VariantCalling.referenceFile": "tests/data/reference/LC029411.fasta",
     "VariantCalling.referenceFileIndex": "tests/data/reference/LC029411.fasta.fai",
     "VariantCalling.referenceFileDict": "tests/data/reference/LC029411.dict",
