@@ -36,6 +36,7 @@ workflow VariantCalling {
         File referenceFile
         File referenceFileIndex
         File referenceFileDict
+        File multiQC_config = "multiqc_config.yml"
         File? limaBarcodes
         File? targetGenes
         File? referenceFileMMI
@@ -213,6 +214,7 @@ workflow VariantCalling {
             dataFormat = "json",
             limaBarcodes = limaBarcodes,
             targetGenes = targetGenes,
+            config = multiQC_config,
             whatshapBlocklist = select_all(stats.phasedBlockList),
             whatshapSamples = sampleName,
             dataDir = true

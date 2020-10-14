@@ -51,6 +51,7 @@
         - "PGx"
         - "Minor_capsid_protein"
         - "Large_T_antigen"
+        - "https://github.com/biowdl/PacBio-variantcalling"
       must_not_contain:
         - "Sample_1_3p--Sample_1_3p"
         - "Sample_3_3p--Sample_3_3p"
@@ -84,7 +85,6 @@
       must_not_contain:
         - "Phasing per sample"
         - "Phasing per Gene"
-        - "PGx"
         - "Minor_capsid_protein"
         - "Large_T_antigen"
 
