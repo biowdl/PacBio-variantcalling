@@ -46,8 +46,10 @@
         - "ZMWs filtered by Lima"
         - "block_n50"
         - "variant_per_block_avg"
-        - "Phasing per Sample"
-        - "Phasing per Gene"
+        - "Phasing per sample"
+        - "Phased blocks per sample"
+        - "Phasing per gene"
+        - "Phased blocks per gene"
         - "PGx"
         - "Minor_capsid_protein"
         - "Large_T_antigen"
@@ -77,9 +79,6 @@
     - path: test-output/Sample_4_3p.phased.blocklist
     - path: test-output/multiqc/multiqc_report.html
       contains:
-        - "Sample_1_3p--Sample_1_3p"
-        - "Sample_3_3p--Sample_3_3p"
-        - "Sample_4_3p--Sample_4_3p"
         - "block_n50"
         - "variant_per_block_avg"
       must_not_contain:

@@ -58,7 +58,7 @@ task MultiQC {
         String? memory
 
         Int timeMinutes = 2 + ceil(size(reports, "G") * 8)
-        String dockerImage = "lumc/multiqc_pgx:1.10.dev4"
+        String dockerImage = "lumc/multiqc_pgx:1.10.dev5"
     }
     Int memoryGb = 2 + ceil(size(reports, "G"))
 
