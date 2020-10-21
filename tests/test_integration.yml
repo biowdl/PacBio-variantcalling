@@ -54,6 +54,7 @@
         - "Minor_capsid_protein"
         - "Large_T_antigen"
         - "https://github.com/biowdl/PacBio-variantcalling"
+        - "The number of biallelic, heterozygous variants"
       must_not_contain:
         - "Sample_1_3p--Sample_1_3p"
         - "Sample_3_3p--Sample_3_3p"
