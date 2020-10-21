@@ -96,3 +96,14 @@
   stdout:
     contains:
       - "Success!"
+
+- name: validate-workflow-settings-subreads-index
+  tags:
+    - sanity
+  command: >
+    womtool validate
+    --inputs tests/data/config/variant_calling_subreads_index.json
+    PacBio-variantcalling.wdl
+  stdout:
+    contains:
+      - "Success!"

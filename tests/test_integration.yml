@@ -11,6 +11,7 @@
       - 'SubreadsProcessing.limaReads.*batch.1.march.Sample_1_3p--Sample_1_3p.bam'
       - 'Starting .*VariantCalling.index'
       - 'Starting .*VariantCalling.targetToInterval'
+      - 'Starting .*SubreadsProcessing.pbindex'
     contains:
       - '--num-threads 8'
   files:
@@ -166,3 +167,15 @@
         - "HSMetrics"
         - "Target Region Coverage"
     - path: test-output/multiqc/multiqc_data.zip
+
+- name: test-workflow-subreads-index
+  tags:
+    - integration
+  command: >
+    cromwell run
+    --options tests/data/config/cromwell.options.json
+    --inputs tests/data/config/variant_calling_subreads_index.json
+    PacBio-variantcalling.wdl
+  stdout:
+      must_not_contain_regex:
+        - 'Starting .*SubreadsProcessing.pbindex'

@@ -32,6 +32,7 @@ import "multiqc_pgx.wdl" as multiqc
 workflow VariantCalling {
     input {
         File subreadsFile
+        File? subreadsIndexFile
         File barcodesFasta
         File referenceFile
         File referenceFileIndex
@@ -50,6 +51,7 @@ workflow VariantCalling {
     call SubreadsProcessing.SubreadsProcessing as SubreadsProcessing {
         input:
             subreadsFile = subreadsFile,
+            subreadsIndexFile = subreadsIndexFile,
             barcodesFasta = barcodesFasta,
             limaCores = 8,
             ccsCores = 8,
@@ -257,7 +259,8 @@ workflow VariantCalling {
         referenceFileIndex: {description: "The samtools index file for the reference.", category: "required"}
         referenceFileDict: {description: "The picard dictionary file for the reference.", category: "required"}
         referenceFileMMI: {description: "The minimap2 mmi file for the reference.", category: "optional"}
-        subreadsConfigFile: {description: "Configuration file for the subreads processing.", category: "required"}
+        subreadsFile: {description: "Subreads input bam file", category: "required"}
+        subreadsIndexFile: {description: "PacBio index file for the subreads input bam file", category: "common"}
         useDeepVariant: {description: "Use DeepVariant caller, the default is to use GATK4", category: "common"}
         targetGenes: {description: "Bed file containing the target genes. Used to determine the PGx phasing and Picard HsMetrics", category: "optional"}
     }
