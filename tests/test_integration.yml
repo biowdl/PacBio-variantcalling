@@ -9,9 +9,9 @@
   stdout:
     contains_regex:
       - 'SubreadsProcessing.limaReads.*batch.1.march.Sample_1_3p--Sample_1_3p.bam'
-      - 'Starting VariantCalling.index'
+      - 'Starting .*VariantCalling.index'
+      - 'Starting .*VariantCalling.targetToInterval'
     contains:
-      - 'Starting VariantCalling.index'
       - '--num-threads 8'
   files:
     - path: test-output/Sample_1_3p.g.vcf.gz
@@ -133,8 +133,8 @@
     PacBio-variantcalling.wdl
   stdout:
     contains_regex:
-      - 'BAIT_INTERVALS=.*LC029411.targets.interval'
-      - 'TARGET_INTERVALS=.*LC029411.targets.interval'
+      - 'BAIT_INTERVALS=.*interval_list'
+      - 'TARGET_INTERVALS=.*interval_list'
   files:
     - path: test-output/multiqc/multiqc_report.html
       contains:
@@ -153,8 +153,9 @@
     PacBio-variantcalling.wdl
   stdout:
     contains_regex:
-      - 'BAIT_INTERVALS=.*LC029411.baits.interval'
-      - 'TARGET_INTERVALS=.*LC029411.targets.interval'
+      - 'BAIT_INTERVALS=.*interval_list'
+      - 'TARGET_INTERVALS=.*interval_list'
+      - 'Starting .*VariantCalling.baitsToInterval'
     must_not_contain_regex:
       - 'BAIT_INTERVALS=.*LC029411.targets.interval'
   files:

@@ -38,13 +38,12 @@ workflow VariantCalling {
         File referenceFileDict
         File multiQC_config = "multiqc_config.yml"
         File? limaBarcodes
-        File? targetGenes
         File? referenceFileMMI
         String referencePrefix
         Boolean useDeepVariant = false
         File? dbsnp
         File? dbsnpIndex
-        File? targetInterval
+        File? targetGenes
         File? targetBaits
     }
 
@@ -63,6 +62,21 @@ workflow VariantCalling {
                 useHomopolymerCompressedKmer = true,
                 outputPrefix = referencePrefix,
                 referenceFile = referenceFile
+        }
+    }
+
+    if (defined(targetGenes)) {
+        call picard.BedToIntervalList as targetToInterval {
+            input:
+                bedFile = select_first([targetGenes]),
+                dict = referenceFileDict
+        }
+    }
+    if (defined(targetBaits)) {
+        call picard.BedToIntervalList as baitsToInterval {
+            input:
+                bedFile = select_first([targetBaits]),
+                dict = referenceFileDict
         }
     }
 
@@ -97,7 +111,7 @@ workflow VariantCalling {
                 collectBaseDistributionByCycle = false
         }
         
-        if (defined(targetInterval)) {
+        if (defined(targetGenes)) {
             call picard.CollectHsMetrics as picard_hs_metrics {
                 input:
                     inputBam = mapping.outputAlignmentFile,
@@ -106,8 +120,9 @@ workflow VariantCalling {
                     referenceFastaDict = referenceFileDict,
                     referenceFastaFai = referenceFileIndex,
                     basename = pair.left,
-                    targets = select_first([targetInterval]),
-                    baits = targetBaits
+                    targets = select_first([targetToInterval.intervalList]),
+                    baits = select_first([baitsToInterval.intervalList,
+                            targetToInterval.intervalList])
             }
         }
 
@@ -244,5 +259,6 @@ workflow VariantCalling {
         referenceFileMMI: {description: "The minimap2 mmi file for the reference.", category: "optional"}
         subreadsConfigFile: {description: "Configuration file for the subreads processing.", category: "required"}
         useDeepVariant: {description: "Use DeepVariant caller, the default is to use GATK4", category: "common"}
+        targetGenes: {description: "Bed file containing the target genes. Used to determine the PGx phasing and Picard HsMetrics", category: "optional"}
     }
 }
