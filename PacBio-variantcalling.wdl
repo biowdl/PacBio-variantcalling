@@ -188,6 +188,7 @@ workflow VariantCalling {
                         inputBam = mapping.outputAlignmentFile,
                         inputBamIndex = mapping.outputIndexFile,
                         modelType = "PACBIO",
+                        postprocessVariantsExtraArgs = "cnn_homref_call_min_gq=0",
                         regions = region,
                         sampleName = pair.left,
                         outputVcf = pair.left + "_" + scatterName + ".vcf.gz",

@@ -28,6 +28,7 @@ task RunDeepVariant {
         File inputBamIndex
         String modelType
         String outputVcf
+        String? postprocessVariantsExtraArgs
         File? customizedModel
         Int? numShards
         String? outputGVcf
@@ -53,6 +54,7 @@ task RunDeepVariant {
         ~{"--num_shards " + numShards} \
         ~{"--regions "  + regions} \
         ~{"--sample_name " + sampleName} \
+        ~{"--postprocess_variants_extra_args " + postprocessVariantsExtraArgs} \
         ~{true="--vcf_stats_report" false="--novcf_stats_report" VCFStatsReport}
     }
 
