@@ -28,6 +28,7 @@ import "picard.wdl" as picard
 import "pbmm2.wdl" as pbmm2
 import "whatshap.wdl" as whatshap
 import "multiqc_pgx.wdl" as multiqc
+import "tasks/chunked-scatter.wdl" as chunkedScatter
 
 workflow VariantCalling {
     input {
@@ -87,6 +88,12 @@ workflow VariantCalling {
     # Combine the sample names with the bam files
     Array[Pair[String, File]] SampleBam = zip(SubreadsProcessing.samples, SubreadsProcessing.limaReads)
 
+    # Determine the scatters for GATK
+    call chunkedScatter.ScatterRegions as scatterList {
+        input:
+            inputFile = referenceFileIndex
+    }
+
     scatter (pair in SampleBam) {
         # We need to know the order of the samples for MultiQC_PGx
         String sampleName = pair.left
@@ -112,7 +119,7 @@ workflow VariantCalling {
                 meanQualityByCycle = false,
                 collectBaseDistributionByCycle = false
         }
-        
+
         if (defined(targetGenes)) {
             call picard.CollectHsMetrics as picard_hs_metrics {
                 input:
@@ -129,25 +136,48 @@ workflow VariantCalling {
         }
 
         if (!useDeepVariant) {
-            call gatk.HaplotypeCaller as gvcf{
-                input:
-                    inputBams = [mapping.outputAlignmentFile],
-                    inputBamsIndex = [mapping.outputIndexFile],
-                    outputPath = pair.left + ".g.vcf.gz",
-                    referenceFasta = referenceFile,
-                    referenceFastaIndex = referenceFileIndex,
-                    gvcf = true,
-                    referenceFastaDict = referenceFileDict
+            scatter (region in scatterList.scatters) {
+                call gatk.HaplotypeCaller as gvcf {
+                    input:
+                        inputBams = [mapping.outputAlignmentFile],
+                        inputBamsIndex = [mapping.outputIndexFile],
+                        outputPath = pair.left + ".g.vcf.gz",
+                        referenceFasta = referenceFile,
+                        referenceFastaIndex = referenceFileIndex,
+                        intervalList = [region],
+                        gvcf = true,
+                        referenceFastaDict = referenceFileDict
+                }
+
+                call gatk.GenotypeGVCFs as gatkVCF {
+                    input:
+                        gvcfFile = gvcf.outputVCF,
+                        gvcfFileIndex = gvcf.outputVCFIndex,
+                        outputPath = pair.left + ".vcf.gz",
+                        referenceFasta = referenceFile,
+                        intervals = [region],
+                        referenceFastaFai = referenceFileIndex,
+                        referenceFastaDict = referenceFileDict
+                }
             }
 
-            call gatk.GenotypeGVCFs as gatkVCF {
+            # Merge the gvcf files
+            call gatk.CombineGVCFs as combineGVCFs{
                 input:
-                    gvcfFile = gvcf.outputVCF,
-                    gvcfFileIndex = gvcf.outputVCFIndex,
-                    outputPath = pair.left + ".vcf.gz",
+                    gvcfFiles = gvcf.outputVCF,
+                    gvcfFilesIndex = gvcf.outputVCFIndex,
+                    outputPath = pair.left + ".g.vcf.gz",
                     referenceFasta = referenceFile,
-                    referenceFastaFai = referenceFileIndex,
-                    referenceFastaDict = referenceFileDict
+                    referenceFastaDict = referenceFileDict,
+                    referenceFastaFai = referenceFileIndex
+            }
+
+            # Merge the vcf files
+            call picard.MergeVCFs as combineVCFs {
+                input:
+                    inputVCFs = gatkVCF.outputVCF,
+                    inputVCFsIndexes = gatkVCF.outputVCFIndex,
+                    outputVcfPath = pair.left + ".vcf.gz"
             }
         }
 
@@ -165,10 +195,10 @@ workflow VariantCalling {
             }
         }
 
-        File outputVCF = select_first([gatkVCF.outputVCF, DeepVariant.outputVCF])
-        File outputVCFIndex = select_first([gatkVCF.outputVCFIndex, DeepVariant.outputVCFIndex])
-        File outputGVCF = select_first([gvcf.outputVCF, DeepVariant.outputGVCF])
-        File outputGVCFIndex = select_first([gvcf.outputVCFIndex, DeepVariant.outputGVCFIndex])
+        File outputVCF = select_first([combineVCFs.outputVcf, DeepVariant.outputVCF])
+        File outputVCFIndex = select_first([combineVCFs.outputVcfIndex, DeepVariant.outputVCFIndex])
+        File outputGVCF = select_first([combineGVCFs.outputVcf, DeepVariant.outputGVCF])
+        File outputGVCFIndex = select_first([combineGVCFs.outputVcfIndex, DeepVariant.outputGVCFIndex])
 
         call whatshap.Phase as phase {
             input:

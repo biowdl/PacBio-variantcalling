@@ -12,6 +12,8 @@
       - 'Starting .*VariantCalling.index'
       - 'Starting .*VariantCalling.targetToInterval'
       - 'Starting .*SubreadsProcessing.pbindex'
+      - 'Starting .*VariantCalling.combineVCFs'
+      - 'Starting .*VariantCalling.combineGVCFs'
     contains:
       - '--num-threads 8'
   files:
