@@ -36,11 +36,16 @@
     contains:
       - "Success!"
 
-        #- name: biowdl-lint
-        #  tags:
-        #    - sanity
-        #  command: >
-        #    bash scripts/biowdl_lint.sh
+- name: validate-workflow-settings-scatter
+  tags:
+    - sanity
+  command: >
+    womtool validate
+    --inputs tests/data/config/variant_calling_scatter.json
+    PacBio-variantcalling.wdl
+  stdout:
+    contains:
+      - "Success!"
 
 - name: validate-workflow-settings-mmi
   tags:
@@ -59,6 +64,17 @@
   command: >
     womtool validate
     --inputs tests/data/config/variant_calling_DeepVariant.json
+    PacBio-variantcalling.wdl
+  stdout:
+    contains:
+      - "Success!"
+
+- name: validate-workflow-settings-DeepVariant-scatter
+  tags:
+    - sanity
+  command: >
+    womtool validate
+    --inputs tests/data/config/variant_calling_DeepVariant_scatter.json
     PacBio-variantcalling.wdl
   stdout:
     contains:
