@@ -182,23 +182,42 @@ workflow VariantCalling {
         }
 
         if (useDeepVariant) {
-            call deepvariant.RunDeepVariant as DeepVariant{
+            scatter (region in scatterList.scatters) {
+                String scatterName = basename(region)
+                call deepvariant.RunDeepVariant as DeepVariant{
+                    input:
+                        referenceFasta = referenceFile,
+                        referenceFastaIndex = referenceFileIndex,
+                        inputBam = mapping.outputAlignmentFile,
+                        inputBamIndex = mapping.outputIndexFile,
+                        modelType = "PACBIO",
+                        regions = region,
+                        sampleName = pair.left,
+                        outputVcf = pair.left + "_" + scatterName + ".vcf.gz",
+                        outputGVcf = pair.left + "_" + scatterName + ".g.vcf.gz"
+                }
+            }
+
+            # Merge the DeepVariant VCF files
+            call picard.MergeVCFs as combineDeepVariantVCFs {
                 input:
-                    referenceFasta = referenceFile,
-                    referenceFastaIndex = referenceFileIndex,
-                    inputBam = mapping.outputAlignmentFile,
-                    inputBamIndex = mapping.outputIndexFile,
-                    modelType = "PACBIO",
-                    sampleName = pair.left,
-                    outputVcf = pair.left + ".vcf.gz",
-                    outputGVcf = pair.left + ".g.vcf.gz"
+                    inputVCFs = DeepVariant.outputVCF,
+                    inputVCFsIndexes = DeepVariant.outputVCFIndex,
+                    outputVcfPath = pair.left + ".vcf.gz"
+            }
+            # Merge the DeepVariant GVCF files
+            call picard.MergeVCFs as combineDeepVariantGVCFs {
+                input:
+                    inputVCFs = select_all(DeepVariant.outputGVCF),
+                    inputVCFsIndexes = select_all(DeepVariant.outputGVCFIndex),
+                    outputVcfPath = pair.left + ".g.vcf.gz",
             }
         }
 
-        File outputVCF = select_first([combineVCFs.outputVcf, DeepVariant.outputVCF])
-        File outputVCFIndex = select_first([combineVCFs.outputVcfIndex, DeepVariant.outputVCFIndex])
-        File outputGVCF = select_first([combineGVCFs.outputVcf, DeepVariant.outputGVCF])
-        File outputGVCFIndex = select_first([combineGVCFs.outputVcfIndex, DeepVariant.outputGVCFIndex])
+        File outputVCF = select_first([combineVCFs.outputVcf, combineDeepVariantVCFs.outputVcf])
+        File outputVCFIndex = select_first([combineVCFs.outputVcfIndex, combineDeepVariantVCFs.outputVcfIndex])
+        File outputGVCF = select_first([combineGVCFs.outputVcf, combineDeepVariantGVCFs.outputVcf])
+        File outputGVCFIndex = select_first([combineGVCFs.outputVcfIndex, combineDeepVariantGVCFs.outputVcfIndex])
 
         call whatshap.Phase as phase {
             input:

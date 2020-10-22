@@ -51,7 +51,7 @@ task RunDeepVariant {
         ~{"--output_gvcf " + outputGVcf} \
         ~{"--customized_model " + customizedModel} \
         ~{"--num_shards " + numShards} \
-        ~{"--regions} " + regions} \
+        ~{"--regions "  + regions} \
         ~{"--sample_name " + sampleName} \
         ~{true="--vcf_stats_report" false="--novcf_stats_report" VCFStatsReport}
     }
