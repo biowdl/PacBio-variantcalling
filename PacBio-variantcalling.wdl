@@ -28,7 +28,7 @@ import "picard.wdl" as picard
 import "pbmm2.wdl" as pbmm2
 import "whatshap.wdl" as whatshap
 import "multiqc_pgx.wdl" as multiqc
-import "chunked-scatter.wdl" as chunkedScatter
+import "tasks/chunked-scatter.wdl" as chunkedScatter
 
 workflow VariantCalling {
     input {
