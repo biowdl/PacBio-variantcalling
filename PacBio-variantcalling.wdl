@@ -162,14 +162,11 @@ workflow VariantCalling {
             }
 
             # Merge the gvcf files
-            call gatk.CombineGVCFs as combineGVCFs{
+            call picard.MergeVCFs as combineGVCFs {
                 input:
-                    gvcfFiles = gvcf.outputVCF,
-                    gvcfFilesIndex = gvcf.outputVCFIndex,
-                    outputPath = pair.left + ".g.vcf.gz",
-                    referenceFasta = referenceFile,
-                    referenceFastaDict = referenceFileDict,
-                    referenceFastaFai = referenceFileIndex
+                    inputVCFs = gvcf.outputVCF,
+                    inputVCFsIndexes = gvcf.outputVCFIndex,
+                    outputVcfPath = pair.left + ".g.vcf.gz"
             }
 
             # Merge the vcf files
