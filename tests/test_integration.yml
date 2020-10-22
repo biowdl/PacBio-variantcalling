@@ -116,6 +116,17 @@
       - '/opt/deepvariant/bin/run_deepvariant'
 
   files:
+    - path: test-output/Sample_1_3p.phased.vcf.gz
+      contains:
+        - "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tSample_1_3p"
+      contains_regex:
+        - "LC029411\t4601\t.\tCACCTATAAAAAAAATAATTACTTAGGGCCTTTTAATATTTTATTATTTATCTAAATATAAGTTAGTT\tC\t.*0/0"
+    - path: test-output/Sample_1_3p.g.vcf.gz
+      contains_regex:
+        - "LC029411\t1\t.\tT\t.*END=1000"
+        - "LC029411\t1001\t.\tT\t.*\tEND=2000"
+        - "LC029411\t4452\t.\tCT\tC,.*GT:GQ:DP:AD:VAF:PL\t0/0:33:14:11,2,0:0.142857,0:0,33,60,990,990,990"
+        - "LC029411\t4601\t.\tCACCTATAAAAAAAATAATTACTTAGGGCCTTTTAATATTTTATTATTTATCTAAATATAAGTTAGTT\tC,.*GT:GQ:DP:AD:VAF:PL\t0/0:19:14:3,2,0:0.142857,0:0,19,31,990,990,990"
     - path: test-output/Sample_4_3p.g.vcf.gz
     - path: test-output/Sample_4_3p.g.vcf.gz.tbi
     - path: test-output/Sample_4_3p.phased.vcf.gz
