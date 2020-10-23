@@ -22,9 +22,17 @@ table_columns_visible:
   Picard:
     PCT_PF_READS_ALIGNED: False
     FOLD_ENRICHMENT: False
+  WhatsHap:
+    variants: True
+
 
 table_columns_placement:
   HsMetrics:
-    ON_TARGET_BASES: 900
     PCT_USABLE_BASES_ON_TARGET: 900
-    ZERO_CVG_TARGETS_PCT: 900
+    ZERO_CVG_TARGETS_PCT: 901
+    FOLD_ENRICHMENT: 902
+    MEAN_TARGET_COVERAGE: 903
+    MEDIAN_TARGET_COVERAGE: 904
+    PF_READS: 905
+    PF_UNIQUE_READS: 906
+    ON_TARGET_BASES: 907
