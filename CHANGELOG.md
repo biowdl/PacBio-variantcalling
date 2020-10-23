@@ -10,6 +10,7 @@ that users understand how the changes affect the new version.
 
 version develop
 ---------------------------
++ Add scattering to the genotyping steps for GATK and DeepVariant.
 + Automatically convert target and bait bed files to picard .interval files,
     simplifying the output.
 + Add custom MultiQC configuration file.
