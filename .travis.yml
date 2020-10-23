@@ -46,4 +46,20 @@ matrix:
     - env:
       - TEST="sanity"
     - env:
-      - TEST="integration"
+      - TEST="test-workflow"
+    - env:
+      - TEST="test-workflow-scatter"
+    - env:
+      - TEST="test-workflow-mmi"
+    - env:
+      - TEST="test-workflow-DeepVariant"
+    - env:
+      - TEST="test-workflow-DeepVariant-scatter"
+    - env:
+      - TEST="test-workflow-dbsnp"
+    - env:
+      - TEST="test-workflow-hsmetric"
+    - env:
+      - TEST="test-workflow-hsmetric-baits"
+    - env:
+      - TEST="test-workflow-subreads-index"
