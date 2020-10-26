@@ -146,6 +146,7 @@ workflow VariantCalling {
                         referenceFastaIndex = referenceFileIndex,
                         intervalList = [region],
                         gvcf = true,
+                        javaXmxMb = 8192,
                         referenceFastaDict = referenceFileDict
                 }
 
