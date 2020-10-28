@@ -21,12 +21,12 @@ version 1.0
 # SOFTWARE.
 
 import "PacBio-subreads-processing/pacbio-subreads-processing.wdl" as SubreadsProcessing
-import "deepvariant.wdl" as deepvariant
-import "gatk.wdl" as gatk
+import "tasks/deepvariant.wdl" as deepvariant
+import "tasks/gatk.wdl" as gatk
 import "tasks/minimap2.wdl" as minimap2
-import "picard.wdl" as picard
-import "pbmm2.wdl" as pbmm2
-import "whatshap.wdl" as whatshap
+import "tasks/picard.wdl" as picard
+import "tasks/pbmm2.wdl" as pbmm2
+import "tasks/whatshap.wdl" as whatshap
 import "multiqc_pgx.wdl" as multiqc
 import "tasks/chunked-scatter.wdl" as chunkedScatter
 
@@ -248,7 +248,7 @@ workflow VariantCalling {
                 vcf = phase.phasedVCF,
                 gtf = pair.left + ".phased.gtf",
                 tsv = pair.left + ".phased.tsv",
-                block_list = pair.left + ".phased.blocklist"
+                blockList = pair.left + ".phased.blocklist"
         }
 
         call whatshap.Haplotag as haplotag {
