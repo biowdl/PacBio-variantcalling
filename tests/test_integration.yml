@@ -16,6 +16,10 @@
       - 'Starting .*VariantCalling.combineGVCFs'
     contains:
       - '--num-threads 8'
+      - '--chunk 1/1'
+    must_not_contain:
+      - "--chunk 5/20"
+
   files:
     - path: test-output/Sample_1_3p.g.vcf.gz
       contains_regex:

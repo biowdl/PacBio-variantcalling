@@ -7,5 +7,6 @@
     "VariantCalling.referenceFileDict": "tests/data/reference/LC029411.dict",
     "VariantCalling.referencePrefix": "LC029411",
     "VariantCalling.useDeepVariant": "true",
+    "VariantCalling.ccsChunks": "1",
     "VariantCalling.limaBarcodes": "tests/data/config/lima-barcodes.txt"
 }

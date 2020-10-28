@@ -43,6 +43,7 @@ workflow VariantCalling {
         File? referenceFileMMI
         String referencePrefix
         Boolean useDeepVariant = false
+        Int ccsChunks = 20
         File? dbsnp
         File? dbsnpIndex
         File? targetGenes
@@ -56,7 +57,7 @@ workflow VariantCalling {
             barcodesFasta = barcodesFasta,
             limaCores = 8,
             ccsCores = 8,
-            ccsChunks = 20
+            ccsChunks = ccsChunks
     }
 
     if (!defined(referenceFileMMI)) {
