@@ -92,7 +92,8 @@ workflow VariantCalling {
     # Determine the scatters for GATK
     call chunkedScatter.ScatterRegions as scatterList {
         input:
-            inputFile = referenceFileIndex
+            inputFile = referenceFileIndex,
+            scatterSizeMillions = 350
     }
 
     scatter (pair in SampleBam) {

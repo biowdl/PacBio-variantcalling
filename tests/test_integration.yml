@@ -17,6 +17,7 @@
     contains:
       - '--num-threads 8'
       - '--chunk 1/1'
+      - '--scatter-size 350000000'
     must_not_contain:
       - "--chunk 5/20"
 
