@@ -36,13 +36,6 @@ after_failure:
 
 matrix:
   include:
-    - env: TEST="validate"
-      if: branch = master
-      install:
-        - conda install cromwell miniwdl wdl-aid
-      script: bash scripts/biowdl_lint.sh
-      after_failure:
-        - echo "Linting failed"
     - env:
       - TEST="sanity"
     - env:
