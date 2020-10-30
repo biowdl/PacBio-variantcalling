@@ -36,10 +36,13 @@ cromwell run \
 This will run the pipeline for you using the
 `tests/data/config/variant_calling.json` example configuration file. After the
 pipeline has completed, you can find the full execution folder in
-`cromwell-executions`. For your convenience, the workflow outputs have also
-been copied to the `test-output` folder in the current directory. For your own
-analysis, you can take the `variant_calling.json` file as a starting point, and
-update the `subreadsFile` and `barcodesFasta` to point to your own data. It is
-probably also best to leave out `"VariantCalling.ccsChunks": "1"`, since that
-prevents running the CCS step in parallel. By default, the pipeline will split
-the CSS step in 20 chunks to speed up the analysis.
+`cromwell-executions`. The workflow outputs have also
+been copied to the `test-output` folder in the current directory, as is
+specified in the `tests/data/config/cromwell.options.json` options file.
+
+For your own analysis, you can take the `variant_calling.json` file as a
+starting point, and update the `subreadsFile` and `barcodesFasta` to point to
+your own data. It is probably also best to leave out
+`"VariantCalling.ccsChunks": "1"`, since that prevents running the CCS step in
+parallel. By default, the pipeline will split the CSS step in 20 chunks to
+speed up the analysis.
