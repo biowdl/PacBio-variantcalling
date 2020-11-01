@@ -1,0 +1,13 @@
+{
+    "VariantCalling.subreadsFile": "PacBio-subreads-processing/tests/data/batch.1.march.subreads.bam",
+    "VariantCalling.barcodesFasta": "PacBio-subreads-processing/tests/data/batch.1.march.barcodes.fasta",
+    "VariantCalling.referenceFile": "tests/data/reference/LC029411.fasta",
+    "VariantCalling.referenceFileMMI": "tests/data/reference/LC029411.mmi",
+    "VariantCalling.referenceFileIndex": "tests/data/reference/LC029411.fasta.fai",
+    "VariantCalling.referenceFileDict": "tests/data/reference/LC029411.dict",
+    "VariantCalling.targetGenes": "tests/data/config/target_genes.bed",
+    "VariantCalling.targetBaits": "tests/data/config/target_baits.bed",
+    "VariantCalling.referencePrefix": "LC029411",
+    "VariantCalling.ccsChunks": "1",
+    "VariantCalling.limaBarcodes": "tests/data/config/lima-barcodes.txt"
+}

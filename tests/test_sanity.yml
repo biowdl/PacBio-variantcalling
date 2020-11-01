@@ -1,0 +1,125 @@
+- name: test-cromwell
+  tags:
+    - sanity
+  command: >
+    cromwell --version
+  stdout:
+    contains:
+      - "cromwell"
+
+- name: test-womtool
+  tags:
+    - sanity
+  command: >
+    womtool --version
+  stdout:
+    contains:
+      - "womtool"
+
+- name: validate-workflow-wdl
+  tags:
+    - sanity
+  command: >
+    womtool validate PacBio-variantcalling.wdl
+  stdout:
+    contains:
+      - "Success!"
+
+- name: validate-workflow-settings
+  tags:
+    - sanity
+  command: >
+    womtool validate
+    --inputs tests/data/config/variant_calling.json
+    PacBio-variantcalling.wdl
+  stdout:
+    contains:
+      - "Success!"
+
+- name: validate-workflow-settings-scatter
+  tags:
+    - sanity
+  command: >
+    womtool validate
+    --inputs tests/data/config/variant_calling_scatter.json
+    PacBio-variantcalling.wdl
+  stdout:
+    contains:
+      - "Success!"
+
+- name: validate-workflow-settings-mmi
+  tags:
+    - sanity
+  command: >
+    womtool validate
+    --inputs tests/data/config/variant_calling_mmi_index.json
+    PacBio-variantcalling.wdl
+  stdout:
+    contains:
+      - "Success!"
+
+- name: validate-workflow-settings-DeepVariant
+  tags:
+    - sanity
+  command: >
+    womtool validate
+    --inputs tests/data/config/variant_calling_DeepVariant.json
+    PacBio-variantcalling.wdl
+  stdout:
+    contains:
+      - "Success!"
+
+- name: validate-workflow-settings-DeepVariant-scatter
+  tags:
+    - sanity
+  command: >
+    womtool validate
+    --inputs tests/data/config/variant_calling_DeepVariant_scatter.json
+    PacBio-variantcalling.wdl
+  stdout:
+    contains:
+      - "Success!"
+
+- name: validate-workflow-settings-dbsnp
+  tags:
+    - sanity
+  command: >
+    womtool validate
+    --inputs tests/data/config/variant_calling_dbsnp.json
+    PacBio-variantcalling.wdl
+  stdout:
+    contains:
+      - "Success!"
+
+- name: validate-workflow-settings-hsmetric
+  tags:
+    - sanity
+  command: >
+    womtool validate
+    --inputs tests/data/config/variant_calling_hsmetric.json
+    PacBio-variantcalling.wdl
+  stdout:
+    contains:
+      - "Success!"
+
+- name: validate-workflow-settings-hsmetric-baits
+  tags:
+    - sanity
+  command: >
+    womtool validate
+    --inputs tests/data/config/variant_calling_hsmetric_baits.json
+    PacBio-variantcalling.wdl
+  stdout:
+    contains:
+      - "Success!"
+
+- name: validate-workflow-settings-subreads-index
+  tags:
+    - sanity
+  command: >
+    womtool validate
+    --inputs tests/data/config/variant_calling_subreads_index.json
+    PacBio-variantcalling.wdl
+  stdout:
+    contains:
+      - "Success!"

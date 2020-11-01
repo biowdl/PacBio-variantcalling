@@ -1,0 +1,3 @@
+Sample_1_3p	Sample_1_3p	Sample_1_3p
+Sample_3_3p	Sample_3_3p	Sample_3_3p
+Sample_4_3p	Sample_4_3p	Sample_4_3p

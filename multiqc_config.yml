@@ -1,0 +1,38 @@
+title: "LUMC PGx"
+subtitle: "MultiQC report for the PacBio-variantcalling pipeline"
+intro_text: "This report contians QC data for the tools that are part of the PacBio-variantcalling pipeline. The first step of this pipeline is running CCS on the subreads bam file, and then Lima to demultiplex the samples. Reads are mapped against the reference using pbmm2, and variants are called using GATK4 or DeepVariant. Finally, phased BAM and VCF files are generated using WhatsHap."
+report_comment: "The sections under the PGx heading are custom for this project, all other reports are part MultiQC itself"
+
+report_header_info:
+  - Pipeline: 'https://github.com/biowdl/PacBio-variantcalling'
+  - Platform: 'PacBio HiFi'
+  - Project: 'LUMC PGx'
+
+show_analysis_paths: False
+
+table_columns_visible:
+  HSMetrics:
+    BAIT_DESIGN_EFFICIENCY: False
+    MEAN_BAIT_COVERAGE: False
+    NEAR_BAIT_BASES: False
+    OFF_BAIT_BASES: False
+    PCT_USABLE_BASES_ON_BAIT: False
+    ON_BAIT_BASES: False
+    ON_BAIT_VS_SELECTED: False
+  Picard:
+    PCT_PF_READS_ALIGNED: False
+    FOLD_ENRICHMENT: False
+  WhatsHap:
+    variants: True
+
+
+table_columns_placement:
+  HsMetrics:
+    PCT_USABLE_BASES_ON_TARGET: 900
+    ZERO_CVG_TARGETS_PCT: 901
+    FOLD_ENRICHMENT: 902
+    MEAN_TARGET_COVERAGE: 903
+    MEDIAN_TARGET_COVERAGE: 904
+    PF_READS: 905
+    PF_UNIQUE_READS: 906
+    ON_TARGET_BASES: 907
