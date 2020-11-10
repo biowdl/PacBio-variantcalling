@@ -8,5 +8,6 @@
     "VariantCalling.referencePrefix": "LC029411",
     "VariantCalling.useDeepVariant": "true",
     "VariantCalling.ccsChunks": "1",
+    "VariantCalling.generateGVCF": true,
     "VariantCalling.limaBarcodes": "tests/data/config/lima-barcodes.txt"
 }

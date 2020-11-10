@@ -43,6 +43,7 @@ workflow VariantCalling {
         File? referenceFileMMI
         String referencePrefix
         Boolean useDeepVariant = false
+        Boolean generateGVCF = false
         Int ccsChunks = 20
         File? dbsnp
         File? dbsnpIndex
@@ -184,6 +185,11 @@ workflow VariantCalling {
         if (useDeepVariant) {
             scatter (region in scatterList.scatters) {
                 String scatterName = basename(region)
+
+                if (generateGVCF) {
+                    String outputGVcf = pair.left + "_" + scatterName + ".g.vcf.gz"
+                    String outputGVcfIndex = pair.left + "_" + scatterName + ".g.vcf.gz.tbi"
+                }
                 call deepvariant.RunDeepVariant as DeepVariant{
                     input:
                         referenceFasta = referenceFile,
@@ -195,7 +201,8 @@ workflow VariantCalling {
                         regions = region,
                         sampleName = pair.left,
                         outputVcf = pair.left + "_" + scatterName + ".vcf.gz",
-                        outputGVcf = pair.left + "_" + scatterName + ".g.vcf.gz"
+                        outputGVcf = outputGVcf,
+                        outputGVcfIndex = outputGVcfIndex
                 }
             }
 
@@ -206,19 +213,26 @@ workflow VariantCalling {
                     inputVCFsIndexes = DeepVariant.outputVCFIndex,
                     outputVcfPath = pair.left + ".vcf.gz"
             }
-            # Merge the DeepVariant GVCF files
-            call picard.MergeVCFs as combineDeepVariantGVCFs {
-                input:
-                    inputVCFs = select_all(DeepVariant.outputGVCF),
-                    inputVCFsIndexes = select_all(DeepVariant.outputGVCFIndex),
-                    outputVcfPath = pair.left + ".g.vcf.gz",
+            # Merge the DeepVariant GVCF files if they were generated
+            if (generateGVCF) {
+                call picard.MergeVCFs as combineDeepVariantGVCFs {
+                    input:
+                        inputVCFs = select_all(DeepVariant.outputGVCF),
+                        inputVCFsIndexes = select_all(DeepVariant.outputGVCFIndex),
+                        outputVcfPath = pair.left + ".g.vcf.gz",
+                }
             }
         }
 
+        # The VCF output files, either from GATK4 or DeepVariant
         File outputVCF = select_first([combineVCFs.outputVcf, combineDeepVariantVCFs.outputVcf])
         File outputVCFIndex = select_first([combineVCFs.outputVcfIndex, combineDeepVariantVCFs.outputVcfIndex])
-        File outputGVCF = select_first([combineGVCFs.outputVcf, combineDeepVariantGVCFs.outputVcf])
-        File outputGVCFIndex = select_first([combineGVCFs.outputVcfIndex, combineDeepVariantGVCFs.outputVcfIndex])
+
+        # The GVCF output files, only defined when generateGVCF is True
+        if (generateGVCF) {
+            File outputGVCF = select_first([combineGVCFs.outputVcf, combineDeepVariantGVCFs.outputVcf])
+            File outputGVCFIndex = select_first([combineGVCFs.outputVcfIndex, combineDeepVariantGVCFs.outputVcfIndex])
+        }
 
         call whatshap.Phase as phase {
             input:
@@ -295,8 +309,8 @@ workflow VariantCalling {
         Array[File?] phasedGTF = stats.phasedGTF
         Array[File?] phasedTSV = stats.phasedTSV
         Array[File?] phasedBlocklist = stats.phasedBlockList
-        Array[File] GVCF = outputGVCF
-        Array[File] GVCFINdex = outputGVCFIndex
+        Array[File?] GVCF = outputGVCF
+        Array[File?] GVCFIndex = outputGVCFIndex
         File multiQC = multiqc.multiqcReport
         File multiqcDataDirZip  = select_first([multiqc.multiqcDataDirZip])
     }

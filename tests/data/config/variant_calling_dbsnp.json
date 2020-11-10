@@ -9,5 +9,6 @@
     "VariantCalling.dbsnp": "tests/data/reference/LC029411.dbsnp.vcf.gz",
     "VariantCalling.dbsnpIndex": "tests/data/reference/LC029411.dbsnp.vcf.gz.tbi",
     "VariantCalling.ccsChunks": "1",
+    "VariantCalling.generateGVCF": true,
     "VariantCalling.limaBarcodes": "tests/data/config/lima-barcodes.txt"
 }
