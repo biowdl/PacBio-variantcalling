@@ -6,5 +6,6 @@
     "VariantCalling.referenceFileIndex": "tests/data/reference/LC029411.fasta.fai",
     "VariantCalling.referenceFileDict": "tests/data/reference/LC029411.dict",
     "VariantCalling.ccsChunks": "1",
+    "VariantCalling.generateGVCF": true,
     "VariantCalling.referencePrefix": "LC029411"
 }

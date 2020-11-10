@@ -97,6 +97,22 @@
       contains_regex:
         - "LC029411\t4601\t.\tCACCTATAAAAAAAATAATTACTTAGGGCCTTTTAATATTTTATTATTTATCTAAATATAAGTTAGTT\tC\t.*1/1:0,2:2:13:106,13,0"
 
+- name: test-workflow-no-gvcf
+  tags:
+    - integration
+  command: >
+    cromwell run
+    --options tests/data/config/cromwell.options.json
+    --inputs tests/data/config/variant_calling_no_gvcf.json
+    PacBio-variantcalling.wdl
+  files:
+    - path: test-output/Sample_1_3p.g.vcf.gz
+      should_exist: false
+    - path: test-output/Sample_3_3p.g.vcf.gz
+      should_exist: false
+    - path: test-output/Sample_4_3p.g.vcf.gz
+      should_exist: false
+
 - name: test-workflow-mmi
   tags:
     - integration
@@ -125,7 +141,7 @@
         - "Minor_capsid_protein"
         - "Large_T_antigen"
 
-- name: test-workflow-DeepVariant
+- name: test-workflow-deepvariant
   tags:
     - integration
   command: >
@@ -162,7 +178,7 @@
     - path: test-output/Sample_4_3p.phased.tsv
     - path: test-output/Sample_4_3p.phased.blocklist
 
-- name: test-workflow-DeepVariant-scatter
+- name: test-workflow-deepvariant-scatter
   tags:
     - integration
   command: >
@@ -187,6 +203,22 @@
         - "LC029411\t1001\t.\tT\t.*\tEND=2000"
         - "LC029411\t4452\t.\tCT\tC,.*GT:GQ:DP:AD:VAF:PL\t0/0:33:14:11,2,0:0.142857,0:0,33,60,990,990,990"
         - "LC029411\t4601\t.\tCACCTATAAAAAAAATAATTACTTAGGGCCTTTTAATATTTTATTATTTATCTAAATATAAGTTAGTT\tC,.*GT:GQ:DP:AD:VAF:PL\t0/0:19:14:3,2,0:0.142857,0:0,19,31,990,990,990"
+
+- name: test-workflow-deepvariant-no-gvcf
+  tags:
+    - integration
+  command: >
+    cromwell run
+    --options tests/data/config/cromwell.options.json
+    --inputs tests/data/config/variant_calling_DeepVariant_no_gvcf.json
+    PacBio-variantcalling.wdl
+  files:
+    - path: test-output/Sample_1_3p.g.vcf.gz
+      should_exist: false
+    - path: test-output/Sample_4_3p.g.vcf.gz
+      should_exist: false
+    - path: test-output/Sample_4_3p.g.vcf.gz.tbi
+      should_exist: false
 
 - name: test-workflow-dbsnp
   tags:

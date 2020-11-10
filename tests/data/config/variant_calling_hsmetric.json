@@ -8,5 +8,6 @@
     "VariantCalling.targetGenes": "tests/data/config/target_genes.bed",
     "VariantCalling.referencePrefix": "LC029411",
     "VariantCalling.ccsChunks": "1",
+    "VariantCalling.generateGVCF": true,
     "VariantCalling.limaBarcodes": "tests/data/config/lima-barcodes.txt"
 }

@@ -8,7 +8,12 @@ This document is user facing. Please word the changes in such a way
 that users understand how the changes affect the new version.
 -->
 
-version develop
+v2.0.0-dev
+---------------------------
++ Make g.vcf output optional, because generating a g.vcf with DeepVariant is
+extremely slow. This changes the default behaviour.
+
+v1.0.0
 ---------------------------
 + Set scatter size for GATK and DeepVariant to 350 million basepairs.
 + Add scattering to the genotyping steps for GATK and DeepVariant.
