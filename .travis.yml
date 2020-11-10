@@ -47,11 +47,11 @@ matrix:
     - env:
       - TEST="test-workflow-mmi"
     - env:
-      - TEST="test-workflow-DeepVariant"
+      - TEST="test-workflow-deepvariant"
     - env:
-      - TEST="test-workflow-DeepVariant-scatter"
+      - TEST="test-workflow-deepvariant-scatter"
     - env:
-      - TEST="test-workflow-DeepVariant-no-gvcf"
+      - TEST="test-workflow-deepvariant-no-gvcf"
     - env:
       - TEST="test-workflow-dbsnp"
     - env:
