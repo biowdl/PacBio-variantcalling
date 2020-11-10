@@ -21,7 +21,7 @@ version 1.0
 # SOFTWARE.
 
 import "PacBio-subreads-processing/pacbio-subreads-processing.wdl" as SubreadsProcessing
-import "deepvariant.wdl" as deepvariant
+import "tasks/deepvariant.wdl" as deepvariant
 import "tasks/gatk.wdl" as gatk
 import "tasks/minimap2.wdl" as minimap2
 import "tasks/picard.wdl" as picard
