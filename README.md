@@ -46,3 +46,9 @@ your own data. It is probably also best to leave out
 `"VariantCalling.ccsChunks": "1"`, since that prevents running the CCS step in
 parallel. By default, the pipeline will split the CSS step in 20 chunks to
 speed up the analysis.
+
+By default, the g.vcf files are not part of the pipeline output. If you want to
+include the g.vcf files in the pipeline output, please specify
+`"VariantCalling.generateGVCF: true"`. **Important:** specifying
+`"VariantCalling.generateGVCF: true"` in combination with
+`"VariantCalling.useDeepVariant: true"` is **extrememely** slow.
