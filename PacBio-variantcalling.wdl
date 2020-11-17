@@ -323,9 +323,17 @@ workflow VariantCalling {
         referenceFileIndex: {description: "The samtools index file for the reference.", category: "required"}
         referenceFileDict: {description: "The picard dictionary file for the reference.", category: "required"}
         referenceFileMMI: {description: "The minimap2 mmi file for the reference.", category: "optional"}
-        subreadsFile: {description: "Subreads input bam file", category: "required"}
-        subreadsIndexFile: {description: "PacBio index file for the subreads input bam file", category: "common"}
-        useDeepVariant: {description: "Use DeepVariant caller, the default is to use GATK4", category: "common"}
-        targetGenes: {description: "Bed file containing the target genes. Used to determine the PGx phasing and Picard HsMetrics", category: "optional"}
+        subreadsFile: {description: "Subreads input bam file.", category: "required"}
+        subreadsIndexFile: {description: "PacBio index file for the subreads input bam file.", category: "common"}
+        useDeepVariant: {description: "Use DeepVariant caller, the default is to use GATK4.", category: "common"}
+        targetGenes: {description: "Bed file containing the target genes. Used to determine the PGx phasing and Picard HsMetrics.", category: "optional"}
+        targetBaits: {description: "Bed file containing the baits for the target genes. Used by Picard HsMetrics.", category: "optional"}
+        dbsnp: {description: "DBSNP vcf file, to be used with Picard CollectVariantCallingMetrics.", category: "optional"}
+        dbsnpIndex: {description: "Index for the DBSNP vcf file, to be used with Picard CollectVariantCallingMetrics.", category: "optional"}
+        ccsChunks: {description: "Number of scatters to use when calling CCS.", category: "optional"}
+        generateGVCF: {description: "Should g.vcf files be produced by the pipeline. This is extremely slow when used in combination with useDeepVariant.", category: "advanced"}
+        barcodesFasta: {description: "Fasta file with the barcodes to be used by Lima for demultiplexing.", category: "required"}
+        limaBarcodes: {description: "TSV file containing the mapping from barcodes to sample names (forward_barcode \t reverse_barcode \t sample_name). This is used by MultiQC to rename the barcodes to their apropriate sample names.", category: "optional"}
+        multiQC_config: {description: "Configuration file for MultiQC, can be used to customise the final report.", category: "advanced"}
     }
 }
