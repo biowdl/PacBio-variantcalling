@@ -10,6 +10,7 @@ that users understand how the changes affect the new version.
 
 v2.0.1
 ---------------------------
++ Add automatically generated documentation.
 
 v2.0.0
 ---------------------------
